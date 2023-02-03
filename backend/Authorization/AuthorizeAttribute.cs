@@ -2,18 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using backend.Entities;
 
+/*
+ * This class provides the functionality for [Authorization]. 
+ */
 namespace backend.Authorization
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
-        private readonly IList<Role> _roles;
-
-        public AuthorizeAttribute(params Role[] roles)
-        {
-            _roles = roles ?? new Role[] { };
-        }
-
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             // skip authorization if action is decorated with [AllowAnonymous] attribute
@@ -21,13 +17,15 @@ namespace backend.Authorization
             if (allowAnonymous)
                 return;
 
-            // authorization, will check if user has an assigned role
+            /*
+             * This block checks if a user is attached to the current request. 
+             * 
+             * If the user is authenticated, the user should be attached to the incoming request by the JWT Middleware, but 
+             * only if the request contains a valid JWT Token.
+             */
             var user = (User)context.HttpContext.Items["User"];
-            if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
-            {
-                // not logged in or role not authorized
+            if (user == null)
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
-            }
         }
     }
 

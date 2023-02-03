@@ -10,8 +10,10 @@ namespace backend.Authorization
 {
     public interface IJwtUtils
     {
-        public string GenerateJwtToken(User user);
-        public int? ValidateJwtToken(string token);
+        //Generates JWT token with the id of the specified user
+        public string GenerateToken(User user);
+        //Validates given token
+        public int? ValidateToken(string token);
     }
 
     public class JwtUtils : IJwtUtils
@@ -23,7 +25,8 @@ namespace backend.Authorization
             _appSettings = appSettings.Value;
         }
 
-        public string GenerateJwtToken(User user)
+        //Generates JWT token with the id of the specified user
+        public string GenerateToken(User user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -38,7 +41,8 @@ namespace backend.Authorization
             return tokenHandler.WriteToken(token);
         }
 
-        public int? ValidateJwtToken(string token)
+        //Validates given token
+        public int? ValidateToken(string token)
         {
             if (token == null)
                 return null;

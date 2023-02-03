@@ -7,18 +7,19 @@ namespace backend.Authorization
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly AppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next)
         {
             _next = next;
-            _appSettings = appSettings.Value;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
         {
+            //extracts the JWT token from the request Authorization header
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId = jwtUtils.ValidateJwtToken(token);
+            //validate the given token
+            var userId = jwtUtils.ValidateToken(token);
+
             if (userId != null)
             {
                 // attach user to context on successful jwt validation

@@ -1,7 +1,10 @@
 ﻿
-//Custom [AllowAnonymous] tag to keep consistancy with the Custom [Authorize] attribute
+/*
+ * This class has the same functionality as [AllowAnonymous]. 
+ */
 namespace backend.Authorization
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class AllowAnonymousAttribute : Attribute { }
+    public class AllowAnonymousAttribute : Attribute
+    { }
 }

@@ -1,9 +1,7 @@
-using BCryptNet = BCrypt.Net.BCrypt;
-using System.Text.Json.Serialization;
 using backend.Authorization;
-using backend.Entities;
 using backend.Helpers;
 using backend.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend
 {
@@ -12,23 +10,37 @@ namespace backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-           
-            builder.Services.AddDbContext<DataContext>();
-            builder.Services.AddCors();
-            builder.Services.AddControllers().AddJsonOptions(x =>
-            {
-                // serialize enums as strings in api responses (e.g. Role)
-                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+
+            var services = builder.Services;
+            var env = builder.Environment;
+
+            // use sql server db in production and sqlite db in development
+            if (env.IsProduction())
+                services.AddDbContext<DataContext>();
+            else
+                services.AddDbContext<DataContext, SqliteDataContext>();
+
+            services.AddCors();
+            services.AddControllers();
+
+            // configure automapper with all automapper profiles from this assembly
+            services.AddAutoMapper(typeof(Program));
 
             // configure strongly typed settings object
-            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+            services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
             // configure DI for application services
-            builder.Services.AddScoped<IJwtUtils, JwtUtils>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtUtils, JwtUtils>();
+            services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
+
+            // migrate any database changes on startup (includes initial db creation)
+            using (var scope = app.Services.CreateScope())
+            {
+                var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+                dataContext.Database.Migrate();
+            }
 
             // configure HTTP request pipeline
             {
@@ -45,20 +57,6 @@ namespace backend
                 app.UseMiddleware<JwtMiddleware>();
 
                 app.MapControllers();
-            }
-
-            // create hardcoded test users in db on startup
-            {
-                var testUsers = new List<User>
-                {
-                    new User { Id = 1, FirstName = "Admin", LastName = "User", Username = "admin", PasswordHash = BCryptNet.HashPassword("admin"), Role = Role.Admin },
-                    new User { Id = 2, FirstName = "Normal", LastName = "User", Username = "user", PasswordHash = BCryptNet.HashPassword("user"), Role = Role.User }
-                };
-
-                using var scope = app.Services.CreateScope();
-                var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-                dataContext.Users.AddRange(testUsers);
-                dataContext.SaveChanges();
             }
 
             app.Run("http://localhost:4000");
