@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backend.Helpers;
+using backend.Models;
 
 #nullable disable
 
 namespace backend.Migrations.SqliteMigrations
 {
-    [DbContext(typeof(SqliteDataContext))]
-    [Migration("20230203042240_InitialCreate")]
+    [DbContext(typeof(DataContext))]
+    [Migration("20230206211321_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

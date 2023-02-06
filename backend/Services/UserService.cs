@@ -12,7 +12,6 @@ namespace backend.Services
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        IEnumerable<User> GetAll();
         User GetById(int id);
         void Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
@@ -39,19 +38,15 @@ namespace backend.Services
         {
             var user = _context.Users.SingleOrDefault(x => x.Username == model.Username);
 
-            // validate
+            // validate password
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
                 throw new AppException("Username or password is incorrect");
 
             // authentication successful
             var response = _mapper.Map<AuthenticateResponse>(user);
+            //user will be assigned a JWT token each time they log in
             response.Token = _jwtUtils.GenerateToken(user);
             return response;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            return _context.Users;
         }
 
         public User GetById(int id)
@@ -61,11 +56,11 @@ namespace backend.Services
 
         public void Register(RegisterRequest model)
         {
-            // validate
+            // validate username
             if (_context.Users.Any(x => x.Username == model.Username))
                 throw new AppException("Username '" + model.Username + "' is already taken");
 
-            // map model to new user object
+            //copy current model to the user model whose data will be stored in the database
             var user = _mapper.Map<User>(model);
 
             // hash password
@@ -80,7 +75,7 @@ namespace backend.Services
         {
             var user = getUser(id);
 
-            // validate
+            // validate username
             if (model.Username != user.Username && _context.Users.Any(x => x.Username == model.Username))
                 throw new AppException("Username '" + model.Username + "' is already taken");
 
@@ -101,8 +96,7 @@ namespace backend.Services
             _context.SaveChanges();
         }
 
-        // helper methods
-
+        //helper method that returns users based on id
         private User getUser(int id)
         {
             var user = _context.Users.Find(id);
