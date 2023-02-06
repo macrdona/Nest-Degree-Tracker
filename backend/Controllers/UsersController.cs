@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using backend.Authorization;
 using AutoMapper;
-using backend.Models;
+using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
@@ -13,8 +13,8 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
 
         public UsersController(
@@ -27,8 +27,9 @@ namespace backend.Controllers
             _appSettings = appSettings.Value;
         }
 
+        //Ok() will return a response with a status code and formatted data
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("login")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
             var response = _userService.Authenticate(model);
@@ -43,13 +44,6 @@ namespace backend.Controllers
             return Ok(new { message = "Registration successful" });
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -62,13 +56,6 @@ namespace backend.Controllers
         {
             _userService.Update(id, model);
             return Ok(new { message = "User updated successfully" });
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _userService.Delete(id);
-            return Ok(new { message = "User deleted successfully" });
         }
     }
 }
