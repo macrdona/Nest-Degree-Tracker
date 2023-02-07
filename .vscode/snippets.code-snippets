@@ -1,36 +1,55 @@
 {
-	// Place your Software-Engineering-Group-6 workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
-	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
-	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
-	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
-	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
-	// Placeholders with the same ids are connected.
-	// Example:
-	// "Print to console": {
-	// 	"scope": "javascript,typescript",
-	// 	"prefix": "log",
-	// 	"body": [
-	// 		"console.log('$1');",
-	// 		"$2"
-	// 	],
-	// 	"description": "Log output to console"
-	// }
+  // Place your Software-Engineering-Group-6 workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
 
-	"New Component Story": {
-		"scope": "typescript,javascript,typescriptreact,javascriptreact",
-		"prefix": "story",
-		"body": [
-			"import { Story, Meta } from '@storybook/react';",
-			"import ${1:Component} from './$1';",
-			"",
-			"export default {",
-			"    title: '$1',",
-			"    component: $1,",
-			"} as Meta;",
-			"",
-			"const Template: Story<typeof $1> = (props) => <$1 {...props} />;",
-			"export const Base = Template.bind({});$0"
-		],
-		"description": "Create a story for Storybook"
-	}
+  "New Component Story": {
+    "scope": "typescript,javascript,typescriptreact,javascriptreact",
+    "prefix": "story",
+    "body": [
+      "import { Story, Meta } from '@storybook/react';",
+      "import ${1:Component} from './$1';",
+      "",
+      "export default {",
+      "    title: '$1',",
+      "    component: $1,",
+      "} as Meta;",
+      "",
+      "const Template: Story<typeof $1> = (props) => <$1 {...props} />;",
+      "export const Base = Template.bind({});$0"
+    ],
+    "description": "Create a story for Storybook"
+  },
+  "New Component": {
+    "scope": "typescript,javascript,typescriptreact,javascriptreact",
+    "prefix": "comp",
+    "body": [
+      "import './$1.scss';",
+      "",
+	  "interface $1Props {",
+	  "}",
+	  "",
+      "function ${1:Component}(props: $1Props) {",
+      "  return (",
+      "    <div>This is the $1 component!</div>",
+      "  );",
+      "}",
+	  "",
+      "export default $1;"
+    ],
+    "description": "Create a new React Component."
+  }
 }
