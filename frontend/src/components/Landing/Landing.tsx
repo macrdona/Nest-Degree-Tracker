@@ -21,14 +21,14 @@ function Landing() {
           <div className="row">
             <div className="d-flex flex-row gap-2 justify-content-center justify-content-lg-start">
               <Link
-                to={"/login"}
+                to="/login"
                 className="btn btn-primary btn-lg mw-50 px-5 shadow-lg"
               >
                 Login
               </Link>
-              <button className="btn btn-secondary btn-lg mw-50 px-5 shadow-lg">
+              <Link to="/sign-up" className="btn btn-secondary btn-lg mw-50 px-5 shadow-lg">
                 Sign Up
-              </button>
+              </Link>
             </div>
           </div>
         </div>
