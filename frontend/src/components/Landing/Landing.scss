@@ -1,0 +1,25 @@
+@import "../../styles.scss";
+@import "~bootstrap/scss/mixins";
+.landing-area {
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.87) 40.36%,
+      rgba(0, 63, 226, 20%) 99.62%
+    ),
+    url(../../assets/landing-image.jpg);
+  background-size: cover;
+  @include media-breakpoint-up(lg) {
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.87) 20.36%,
+        rgba(0, 63, 226, 20%) 99.62%
+      ),
+      url(../../assets/landing-image.jpg);
+    background-size: cover;
+  }
+  background-position: center;
+}
+
+.landing-text {
+  text-shadow: 5px 5px 10px #0005;
+}

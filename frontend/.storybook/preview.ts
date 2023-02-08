@@ -1,3 +1,4 @@
+import { withRouter } from "storybook-addon-react-router-v6";
 import "../src/styles.scss";
 
 export const parameters = {
@@ -8,5 +9,8 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  layout: 'fullscreen'
+  layout: "fullscreen",
+  reactRouter: {},
 };
+
+export const decorators = [withRouter];

@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap");
+// Styles that are applied globally (fonts, theming, bootstrap settings)
 
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 body {
   margin: 0;
@@ -12,8 +13,8 @@ $font-family-base: "Roboto";
 $headings-font-family: "PT Sans";
 $display-font-weight: 800;
 
-$secondary: #0B233F;
-$primary: #00B2E2;
+$secondary: #0b233f;
+$primary: #00b2e2;
 $dark: $secondary;
 
 $enable-shadows: true;
