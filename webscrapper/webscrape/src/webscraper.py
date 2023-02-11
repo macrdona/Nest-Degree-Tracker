@@ -38,7 +38,6 @@ query = soup.find_all(class_="accordion-item")
 """
 WEB SCRAPING
 """
-
 records = {}
 record_error = 0
 for index,q in enumerate(query):
@@ -62,33 +61,33 @@ for index,q in enumerate(query):
         #remove duplicates
         data = list(dict.fromkeys(data))
 
+        
         #separating course number and course name
-        for i,s in enumerate(data.pop(0).split(":")):
+        for i,s in enumerate(data.pop(0).split(":",1)):
             data.insert(i,s)
         
         #create record
-        record = {"Number": data[0], "Name": data[1], "Credits": data[2], "Prerequisite": "None", "Co-requisite": "None", "Description": "None", "Availability": "None"}
+        record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "None", "CoRequisites": "None", "Description": "None", "Availability": "None"}
 
         #adding info to records
         for d in data[3:]:
             if "prerequisite:" in d.lower() or "prerequisites:" in d.lower():
-                record["Prerequisite"] = d
+                record["Prerequisites"] = d
             elif "co-requisite:" in d.lower() or "co-requisites:" in d.lower():
-                record["Co-requisite"] = d
+                record["CoRequisites"] = d
             elif "description:" in d.lower():
                 record["Description"] = d
             elif "availability:" in d.lower():
                 record["Availability"] = d
             else:
                 record["Description"] = d
-        
+            
         records[index] = record
 
     except AttributeError:
         record_error += 1
 
 print(f"Number of records that could not be processed {record_error}")
-
 
 """
 STORING DATA
@@ -99,5 +98,5 @@ df_json = pd.DataFrame(records)
 
 df_csv = df_csv.swapaxes("index", "columns")
 
-df_json.to_json("output\output.json")
-df_csv.to_csv("output\output.csv")
+df_json.to_json("src\output_v2\output.json")
+df_csv.to_csv("src\output_v2\output.csv")
