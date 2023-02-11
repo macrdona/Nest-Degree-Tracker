@@ -12,10 +12,10 @@ export interface RegisterPayload {
 
 export const useRegister = () => {
   // The useMutation hook takes 3 type parameters:
-  // 1. The response type (this route doesn't respond with any data on success)
+  // 1. The response type (this route doesn't respond with any data on success, so it's void)
   // 2. The error type
   // 3. The payload type (if we are sending data)
-  return useMutation<void, AxiosError<{ message: string }>, RegisterPayload>(
+  return useMutation<void, AxiosError, RegisterPayload>(
     ["/Users/register"],
     async (payload) => {
       const { data } = await Axios({
@@ -30,8 +30,8 @@ export const useRegister = () => {
         console.log(data);
         toast.success("Registered successfully!");
       },
-      onError: ({ response }) => {
-        toast.error(`Failed to register: ${response?.data.message}`);
+      onError: () => {
+        toast.error("Failed to register.");
       },
     }
   );
