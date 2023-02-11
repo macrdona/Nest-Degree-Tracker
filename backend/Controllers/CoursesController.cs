@@ -8,6 +8,9 @@ using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
 
+//[Authorize]
+[ApiController]
+[Route("[controller]")]
 public class CoursesController : ControllerBase
 {
     private ICourseService _courseService;
@@ -24,28 +27,17 @@ public class CoursesController : ControllerBase
         _appSettings = appSettings.Value;
     }
 
-    [HttpGet]
-    public IActionResult Create(CreateCourseRequest model)
-    {
-        _courseService.create(model);
-        return Ok(new { message = "Course Created" });
-    }
     [HttpGet("{id}")]
-    public IActionResult GetById(string id)
+    public IActionResult GetById(string courseId)
     {
-        var course = _courseService.getByID(id);
+        var course = _courseService.getByID(courseId);
         return Ok(course);
     }
-    [HttpPut("{id}")]
-    public IActionResult Update(string id, UpdateCourseRequest model)
+
+    [HttpGet]
+    public IActionResult GetAll()
     {
-        _courseService.update(id, model);
-        return Ok(new { message = "Course updated successfully" });
-    }
-    [HttpDelete("{id}")]
-    public IActionResult Delete(string id)
-    {
-        _courseService.delete(id);
-        return Ok(new { message = "Course deleted successfully" });
+        var courses = _courseService.getAll();
+        return Ok(courses);
     }
 }

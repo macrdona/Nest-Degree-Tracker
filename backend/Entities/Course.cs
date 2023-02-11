@@ -8,25 +8,17 @@ using Microsoft.Extensions.Options;
 
 namespace backend.Entities
 {
-    [Authorize]
-    [ApiController]
-    [Route("[controller]")]
     public class Course
     {
         public string? CourseID { get; set; }
+        public string? CourseName { get; set; }
+        public int? Credits { get; set; }
+
+        public string? Prerequisites { get; set; }
+
+        public string? CoRequisites { get; set; }
         public string? Description { get; set; }
-        public Course? Requirement { get; set; }
+        public string? Availability { get; set; }
     }
-    public class CreateCourseRequest
-    {
-        public string? CourseID { get; set; }
-        public string? Description { get; set; }
-        public Course? Requirement { get; set; }
-    }
-    public class UpdateCourseRequest
-    {
-        public string? CourseID { get; set; }
-        public string? Description { get; set; }
-        public Course? Requirement { get; set; }
-    }
+
 }

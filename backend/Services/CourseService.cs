@@ -10,10 +10,9 @@ namespace backend.Services
 {
     public interface ICourseService
     {
-        void create(CreateCourseRequest model);
         Course getByID(string id);
-        void update(string id, UpdateCourseRequest model);
-        void delete(string id);
+        
+        IEnumerable<Course> getAll();
     }
     public class CourseService : ICourseService
     {
@@ -31,36 +30,12 @@ namespace backend.Services
             _jwtUtils = jwtUtils;
             _mapper = mapper;
         }
-        public void create(CreateCourseRequest model)
-        {
-            // validate course
-            if (_context.Courses.Any(x => x.CourseID == model.CourseID))
-                throw new AppException("Course ID '" + model.CourseID + "' is already in use.");
-            // copy current model to the course model whose data will be stored in the database
-            var course = _mapper.Map<Course>(model);
-            // save course
-            _context.Courses.Add(course);
-            _context.SaveChanges();
-        }
-        public void update(string id, UpdateCourseRequest model)
-        {
-            var course = getCourse(id);
 
-            // validate course
-            if (model.CourseID != course.CourseID && _context.Courses.Any(x => x.CourseID == model.CourseID))
-                throw new AppException("Course ID '" + model.CourseID + "' is already in use.");
-            // copy model to course and save
-            _mapper.Map(model, course);
-            _context.Courses.Update(course);
-            _context.SaveChanges();
-
-        }
-        public void delete(string id)
+        public IEnumerable<Course> getAll()
         {
-            var course = getCourse(id);
-            _context.Courses.Remove(course);
-            _context.SaveChanges();
+            return _context.Courses;
         }
+
         public Course getByID(string id)
         {
             return getCourse(id);
