@@ -34,10 +34,10 @@ html = driver.page_source
 soup = BeautifulSoup(html, "html.parser")
 
 query = soup.find_all(class_="accordion-item")
-
 """
 WEB SCRAPING
 """
+
 records = {}
 record_error = 0
 for index,q in enumerate(query):
@@ -46,6 +46,8 @@ for index,q in enumerate(query):
 
         #extracting data from html
         a_tag = str(q.a.get_text()).replace(u'\xa0', u' ').split("\n")
+        for br in q.section.find_all("br"):
+            br.replace_with("\n")
         section_tag = str(q.section.get_text()).replace(u'\xa0', u' ').split("\n")
 
         data.extend(a_tag)
@@ -59,7 +61,7 @@ for index,q in enumerate(query):
         data = list(filter(None,data))
 
         #remove duplicates
-        data = list(dict.fromkeys(data))
+        data: list[str] = list(dict.fromkeys(data))
 
         
         #separating course number and course name
@@ -67,18 +69,24 @@ for index,q in enumerate(query):
             data.insert(i,s)
         
         #create record
-        record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "", "CoRequisites": "", "Description": "", "Availability": ""}
+        record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "N/A", "CoRequisites": "N/A", "Description": "N/A", "Availability": "N/A", "Repeatability": "N/A", "CourseFees": "N/A"}
 
+        if (record["CourseID"] == "CGN 3501C"):
+            print(section_tag)
         #adding info to records
-        for d in data[3:]:
+        for d in data[2:]:
             if "prerequisite:" in d.lower() or "prerequisites:" in d.lower():
-                record["Prerequisites"] = d.split(':')[1]
+                record["Prerequisites"] = d.split(':', 1)[1]
             elif "co-requisite:" in d.lower() or "co-requisites:" in d.lower():
-                record["CoRequisites"] = d.split(':')[1]
+                record["CoRequisites"] = d.split(':', 1)[1]
             elif "description:" in d.lower():
-                record["Description"] = d.split(':')[1]
+                record["Description"] = d.split(':', 1)[1]
             elif "availability:" in d.lower():
-                record["Availability"] = d.split(':')[1]
+                record["Availability"] = d.split(':', 1)[1]
+            elif "repeatability:" in d.lower():
+                record["Repeatability"] = d.split(':', 1)[1]
+            elif "course fees:" in d.lower() or "course fee:" in d.lower():
+                record["CourseFees"] = d.split(':', 1)[1]
             else:
                 record["Description"] = d
             
