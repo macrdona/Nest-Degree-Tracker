@@ -72,13 +72,13 @@ for index,q in enumerate(query):
         #adding info to records
         for d in data[3:]:
             if "prerequisite:" in d.lower() or "prerequisites:" in d.lower():
-                record["Prerequisites"] = d.split(': ')[1]
+                record["Prerequisites"] = d.split(':')[1]
             elif "co-requisite:" in d.lower() or "co-requisites:" in d.lower():
-                record["CoRequisites"] = d.split(': ')[1]
+                record["CoRequisites"] = d.split(':')[1]
             elif "description:" in d.lower():
-                record["Description"] = d
+                record["Description"] = d.split(':')[1]
             elif "availability:" in d.lower():
-                record["Availability"] = d
+                record["Availability"] = d.split(':')[1]
             else:
                 record["Description"] = d
             
@@ -98,5 +98,5 @@ df_json = pd.DataFrame(records)
 
 df_csv = df_csv.swapaxes("index", "columns")
 
-df_json.to_json("src/output/output.json")
-df_csv.to_csv("src/output/output.csv")
+df_json.to_json("src/output_v3/output.json")
+df_csv.to_csv("src/output_v3/output.csv")
