@@ -1,6 +1,6 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import re
@@ -19,13 +19,12 @@ url = "https://www.unf.edu/catalog/courses/?level=ug"
 driver.get(url)
 
 dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "searchDepartments")))
-
+select = Select(driver.find_element(By.ID, "searchDepartments"))
 # Click on the dropdown to open it
 dropdown.click()
 
-item = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Computing']")))
-item.click()
-
+select.select_by_value("Computing")
+WebDriverWait(driver,4)
 #have website wait until "accordion-item" class elements have been loaded
 WebDriverWait(driver,30).until(EC.presence_of_element_located((By.CLASS_NAME, "accordion-item")))
 
@@ -71,25 +70,28 @@ for index,q in enumerate(query):
         #create record
         record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "N/A", "CoRequisites": "N/A", "Description": "N/A", "Availability": "N/A", "Repeatability": "N/A", "CourseFees": "N/A"}
 
-        if (record["CourseID"] == "CGN 3501C"):
-            print(section_tag)
         #adding info to records
-        for d in data[2:]:
+        for d in data[3:]:
             if "prerequisite:" in d.lower() or "prerequisites:" in d.lower():
-                record["Prerequisites"] = d.split(':', 1)[1]
+                record["Prerequisites"] = d.split(':', 1)[1].strip()
             elif "co-requisite:" in d.lower() or "co-requisites:" in d.lower():
-                record["CoRequisites"] = d.split(':', 1)[1]
+                record["CoRequisites"] = d.split(':', 1)[1].strip()
             elif "description:" in d.lower():
-                record["Description"] = d.split(':', 1)[1]
+                record["Description"] = d.split(':', 1)[1].strip()
             elif "availability:" in d.lower():
-                record["Availability"] = d.split(':', 1)[1]
+                record["Availability"] = d.split(':', 1)[1].strip()
             elif "repeatability:" in d.lower():
-                record["Repeatability"] = d.split(':', 1)[1]
+                record["Repeatability"] = d.split(':', 1)[1].strip()
             elif "course fees:" in d.lower() or "course fee:" in d.lower():
-                record["CourseFees"] = d.split(':', 1)[1]
+                record["CourseFees"] = d.split(':', 1)[1].strip()
             else:
-                record["Description"] = d
+                record["Description"] = d.strip()
             
+            if (record["Description"] == "N/A" and '.' in record["Prerequisites"]):
+                # The description was probably captured by the "Prerequisites" thing due to the description not being on its own line. >:(
+                split = record["Prerequisites"].split(".", 1)
+                record["Prerequisites"] = split[0].strip()
+                record["Description"] = split[1].strip()
         records[index] = record
 
     except AttributeError:
