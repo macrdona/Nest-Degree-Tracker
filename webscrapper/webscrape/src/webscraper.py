@@ -67,14 +67,14 @@ for index,q in enumerate(query):
             data.insert(i,s)
         
         #create record
-        record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "None", "CoRequisites": "None", "Description": "None", "Availability": "None"}
+        record = {"CourseID": data[0], "CourseName": data[1], "Credits": int(re.sub('[^0-9]', "", data[2]).strip()), "Prerequisites": "", "CoRequisites": "", "Description": "", "Availability": ""}
 
         #adding info to records
         for d in data[3:]:
             if "prerequisite:" in d.lower() or "prerequisites:" in d.lower():
-                record["Prerequisites"] = d
+                record["Prerequisites"] = d.split(': ')[1]
             elif "co-requisite:" in d.lower() or "co-requisites:" in d.lower():
-                record["CoRequisites"] = d
+                record["CoRequisites"] = d.split(': ')[1]
             elif "description:" in d.lower():
                 record["Description"] = d
             elif "availability:" in d.lower():
@@ -98,5 +98,5 @@ df_json = pd.DataFrame(records)
 
 df_csv = df_csv.swapaxes("index", "columns")
 
-df_json.to_json("src\output_v2\output.json")
-df_csv.to_csv("src\output_v2\output.csv")
+df_json.to_json("src/output/output.json")
+df_csv.to_csv("src/output/output.csv")
