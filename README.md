@@ -10,4 +10,4 @@
    - Make sure it activates the virtual environment and has a (.venv) before the path name
    - If not, run ./.venv/Scripts/activate
 6. Run `pip install -r requirements.txt`
-7. Run `cd webscrapper/webscrape` then `python webscrapper/webscrape/src/webscraper.py`
+7. Run `cd webscrapper/webscrape` then `python src/webscraper.py`
