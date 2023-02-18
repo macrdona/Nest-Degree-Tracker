@@ -1,0 +1,66 @@
+.col {
+  background: linear-gradient(
+      to top,
+      rgba(0, 63, 226, 0.2),
+      rgba(0, 63, 226, 0.2)
+    ),
+    url("../../assets/library-image.png");
+  background-repeat: no-repeat;
+  height: 100vh;
+  max-height: 1024px;
+  max-width: 665px;
+}
+.col-8 {
+  height: 100vh;
+}
+.col-8 h1 {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 96px;
+  line-height: 124px;
+  color: #0b233f;
+  margin-top: 140px;
+}
+.col-8 form {
+  margin-top: 48px;
+  display: inline-block;
+  text-align: left;
+}
+.col-8 label {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+}
+.errorText {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  color: red;
+}
+input[type="text"] {
+  width: 477px;
+  height: 56px;
+  border: 1px solid #9c9c9c;
+  border-radius: 6px;
+  background: #f4f4f4;
+  margin-bottom: 10px;
+}
+.button {
+  width: 312px;
+  height: 74px;
+  background: #00b2e2;
+  border-radius: 18px;
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  background: #00b2e2;
+  border: none;
+  margin-top: 67px;
+}
