@@ -3,6 +3,7 @@ using backend.Helpers;
 using backend.Models;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mime;
 
 namespace backend
 {
@@ -20,7 +21,20 @@ namespace backend
             services.AddDbContext<DataContext>();
 
             services.AddCors();
-            services.AddControllers();
+
+            //registering service for overriding API ModelState error response
+            services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var result = new ValidationFailedResult(context.ModelState);
+
+                    //responses are formatted to JSON and XML
+                    result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                    result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+                    return result;
+                };
+            });
 
             //allow use of swagger for API testing
             services.AddEndpointsApiExplorer();
