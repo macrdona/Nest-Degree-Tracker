@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 //[Authorize]
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class CoursesController : ControllerBase
 {
     private ICourseService _courseService;
