@@ -2,40 +2,41 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CreateAccount.scss";
+import { useRegister } from "../../lib/api";
+import { useNavigate } from "react-router";
 
 function CreateAccount() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const validate = (): boolean => {
-    if (
-      password !== confirmPassword ||
-      name === "" ||
-      email === "" ||
-      password === ""
-    ) {
-      // Passwords don't match
-      if (password !== confirmPassword) {
-        // Display error to user
-        toast.error("Passwords don't match!");
-        return false;
-      }
+  const { mutate: register } = useRegister();
 
-      // Field is missing
-      if (
-        name === "" ||
-        email === "" ||
-        password === "" ||
-        confirmPassword === ""
-      ) {
-        toast.error("Missing one or more required fields.");
-        return false;
-      }
+  const navigate = useNavigate();
+  
+  const validate = (): boolean => {
+    // Passwords don't match
+    if (password !== confirmPassword) {
+      // Display error to user
+      toast.error("Passwords don't match!");
+      return false;
     }
 
-    console.log(name, email, password);
+    // Field is missing
+    if (
+      firstName === "" ||
+      lastName === "" ||
+      username === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      toast.error("Missing one or more required fields.");
+      return false;
+    }
+
+    console.log(firstName, lastName, username, password);
     return true;
   };
 
@@ -43,6 +44,12 @@ function CreateAccount() {
     if (validate()) {
       // Logic for sending API request
       // Display success and navigate to new page
+      register({ username, firstName, lastName, password}, {
+        onSuccess: () => {
+          navigate("/"); // Should navigate to onboarding screen
+        }
+      })
+
     }
   };
 
@@ -53,20 +60,57 @@ function CreateAccount() {
         <div className="col col-lg-6 p-5 d-flex flex-column align-items-center shadow-lg">
           <h1 className="display-1 mt-5 text-secondary">Create Account</h1>
           <div className="d-flex m-5 w-50">
-            <form className="form d-flex flex-column gap-2 w-100">
+            <form className="form d-flex flex-column gap-2 w-100" noValidate>
+              <div className="row g-2">
+                <div className="col-6 form-group">
+                  <label
+                    htmlFor="firstName"
+                    className="form-label fs-5"
+                  >
+                    First Name
+                  </label>
+                  <input
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    type="text"
+                    className="form-control form-control-lg"
+                    id="firstName"
+                    required
+                    autoComplete="off"
+                  />
+                </div>
+                <div className="col-6 form-group">
+                  <label
+                    htmlFor="lastName"
+                    className="form-label fs-5"
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    type="text"
+                    className="form-control form-control-lg"
+                    id="lastName"
+                    required
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+
               <div className="form-group w-100">
                 <label
-                  htmlFor="formGroupExampleInput"
+                  htmlFor="username"
                   className="form-label fs-5"
                 >
-                  Name
+                  Username
                 </label>
                 <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   type="text"
                   className="form-control form-control-lg"
-                  id="name"
+                  id="username"
                   required
                   autoComplete="off"
                 />
@@ -74,25 +118,7 @@ function CreateAccount() {
 
               <div className="form-group w-100">
                 <label
-                  htmlFor="formGroupExampleInput"
-                  className="form-label fs-5"
-                >
-                  Email
-                </label>
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="text"
-                  className="form-control form-control-lg"
-                  id="email"
-                  required
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="form-group w-100">
-                <label
-                  htmlFor="formGroupExampleInput"
+                  htmlFor="password"
                   className="form-label  fs-5"
                 >
                   Password
@@ -110,8 +136,8 @@ function CreateAccount() {
 
               <div className="form-group w-100">
                 <label
-                  htmlFor="formGroupExampleInput"
-                  className="form-label  fs-5"
+                  htmlFor="confirmPassword"
+                  className="form-label fs-5"
                 >
                   Confirm Password
                 </label>

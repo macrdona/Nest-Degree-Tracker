@@ -26,7 +26,7 @@ function Landing() {
               >
                 Login
               </Link>
-              <Link to="/sign-up" className="btn btn-secondary btn-lg mw-50 px-5 shadow-lg">
+              <Link to="/register" className="btn btn-secondary btn-lg mw-50 px-5 shadow-lg">
                 Sign Up
               </Link>
             </div>
