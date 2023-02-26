@@ -30,10 +30,12 @@ namespace backend.Helpers
     public class ValidationResultModel
     {
         public string StatusCode { get; }
+        public string Message { get; }
         public List<ValidationError> Errors { get; } 
         public ValidationResultModel(ModelStateDictionary modelState)
         {
             StatusCode = "400";
+            Message = "One or more required fields are missing";
             Errors = modelState.Keys.SelectMany(key => modelState[key].Errors
                                     .Select(e => new ValidationError(key, e.ErrorMessage)))
                                     .ToList();
