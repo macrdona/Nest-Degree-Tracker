@@ -5,11 +5,13 @@ using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace backend.Controllers
 {
     [Authorize]
     [ApiController]
+    [ValidateModel]
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
@@ -32,6 +34,11 @@ namespace backend.Controllers
         [HttpPost("login")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var response = _userService.Authenticate(model);
             return Ok(response);
         }
@@ -40,6 +47,11 @@ namespace backend.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _userService.Register(model);
             return Ok(new { message = "Registration successful" });
         }
