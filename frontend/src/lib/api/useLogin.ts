@@ -2,6 +2,7 @@ import { ErrorResponse } from "./types";
 import { useMutation } from "@tanstack/react-query";
 import Axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth } from "../auth/AuthContext";
 
 export interface LoginPayload {
   username: string;
@@ -20,6 +21,7 @@ export const useLogin = () => {
 
     // TODO add auth context, logic here for setting token on successful login
 
+    const { login } = useAuth();
   return useMutation<LoginResponse, ErrorResponse, LoginPayload>(
     ["/Users/login"],
     async (payload) => {
@@ -33,6 +35,7 @@ export const useLogin = () => {
     {
       onSuccess: (data) => {
         toast.success(`Welcome, ${data.firstName}!`);
+        login(data.token);
       },
       onError: ({ response}) => {
         toast.error(response?.data?.message ?? "Unknown Error.");
