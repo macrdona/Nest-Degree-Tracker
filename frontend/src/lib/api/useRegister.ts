@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@remix-run/router";
+import { ErrorResponse } from "./types";
 import { useMutation } from "@tanstack/react-query";
 import Axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ export const useRegister = () => {
   // 1. The response type (this route doesn't respond with any data on success, so it's void)
   // 2. The error type
   // 3. The payload type (if we are sending data)
-  return useMutation<void, AxiosError, RegisterPayload>(
+  return useMutation<void, ErrorResponse, RegisterPayload>(
     ["/Users/register"],
     async (payload) => {
       const { data } = await Axios({
@@ -30,8 +30,8 @@ export const useRegister = () => {
         console.log(data);
         toast.success("Registered successfully!");
       },
-      onError: () => {
-        toast.error("Failed to register.");
+      onError: ({ response}) => {
+        toast.error(response?.data?.message ?? "Unknown Error.");
       },
     }
   );
