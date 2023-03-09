@@ -46,7 +46,7 @@ function CreateAccount() {
       // Display success and navigate to new page
       register({ username, firstName, lastName, password}, {
         onSuccess: () => {
-          navigate("/"); // Should navigate to onboarding screen
+          navigate("/"); // TODO: Should navigate to onboarding screen
         }
       })
 

@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SignIn.scss";
+import { useLogin } from "../../lib/api";
+import { useNavigate } from "react-router";
 
 function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const { mutate: login } = useLogin();
+
+    const navigate = useNavigate();
 
     const validate = (): boolean => {
         // Field is missing
@@ -22,8 +28,13 @@ function SignIn() {
 
     const handleSubmit = () => {
         if (validate()) {
-            // Logic for sending API request
-            // Display success and navigate to new page
+            login({username: username, password: password}, {
+                onSuccess: () => {
+                    navigate("/");
+                    // TODO: Navigate to onboarding if user has not completed it yet
+                    // Otherwise, navigate to degree tracker page
+                }
+            });
         }
     };
 
