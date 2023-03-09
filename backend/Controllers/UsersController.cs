@@ -69,5 +69,26 @@ namespace backend.Controllers
             _userService.Update(id, model);
             return Ok(new { message = "User updated successfully" });
         }
+
+        [AllowAnonymous]
+        [HttpGet("enrollment/{id}")]
+        public IActionResult IsEnrolled(int id)
+        {
+            return Ok(_userService.IsEnrolled(id));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("enrollment/form")]
+        public IActionResult Enrollment(EnrollmentForm form)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var response = _userService.EnrollmentForm(form);
+
+            return Ok(response);
+        }
     }
 }

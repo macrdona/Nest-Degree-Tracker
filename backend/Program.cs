@@ -54,7 +54,7 @@ namespace backend
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICourseService, CourseService>();
-
+            
             var app = builder.Build();
 
             // migrate any database changes on startup (includes initial db creation)
