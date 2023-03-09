@@ -39,11 +39,11 @@ function SignIn() {
     };
 
     return (
-        <div className="container-fluid flex-fill">
+        <div className="container-fluid flex-fill login-page">
             <div className="row no-gutters h-100 flex-fill">
                 <div className="d-none d-lg-flex col background-container"></div>
                 <div className="col col-lg-6 p-5 d-flex flex-column align-items-center shadow-lg">
-                    <h1 className="display-1 mt-5 text-secondary">Create Account</h1>
+                    <h1 className="display-1 mt-5 text-secondary">Login</h1>
                     <div className="d-flex m-5 w-50">
                         <form className="form d-flex flex-column gap-2 w-100">
                             <div className="form-group w-100">

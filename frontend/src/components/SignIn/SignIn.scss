@@ -1,8 +1,11 @@
 @import "../../styles.scss";
+.login-page {
 
-.background-container {
-  background: rgba(0, 64, 226, 0.425) url(../../assets/sign-in-image.png);
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
+  .background-container {
+    background: rgba(0, 64, 226, 0.425) url(../../assets/sign-in-image.png);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: multiply;
+  }
+
 }
