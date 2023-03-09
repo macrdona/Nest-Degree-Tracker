@@ -4,19 +4,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./SignIn.scss";
 
 function SignIn() {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const validate = (): boolean => {
         // Field is missing
         if (
-            email === "" ||
+            username === "" ||
             password === ""
         ) {
             toast.error("Missing one or more required fields.");
             return false;
         }
-        console.log(email, password);
+        console.log(username, password);
         return true;
     };
 
@@ -40,14 +40,14 @@ function SignIn() {
                                     htmlFor="formGroupExampleInput"
                                     className="form-label fs-5"
                                 >
-                                    Email
+                                    Username
                                 </label>
                                 <input
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     type="text"
                                     className="form-control form-control-lg"
-                                    id="email"
+                                    id="username"
                                     required
                                     autoComplete="off"
                                 />
