@@ -13,7 +13,7 @@ namespace backend.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         User GetById(int id);
-        void Register(RegisterRequest model);
+        AuthenticateResponse Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
         void Delete(int id);
     }
@@ -54,7 +54,7 @@ namespace backend.Services
             return getUser(id);
         }
 
-        public void Register(RegisterRequest model)
+        public AuthenticateResponse Register(RegisterRequest model)
         {
             // validate username
             if (_context.Users.Any(x => x.Username == model.Username))
@@ -69,6 +69,11 @@ namespace backend.Services
             // save user
             _context.Users.Add(user);
             _context.SaveChanges();
+
+            var response = _mapper.Map<AuthenticateResponse>(user);
+            response.Token = _jwtUtils.GenerateToken(user);
+
+            return response;
         }
 
         public void Update(int id, UpdateRequest model)

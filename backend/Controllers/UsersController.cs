@@ -52,8 +52,8 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            _userService.Register(model);
-            return Ok(new { message = "Registration successful" });
+            var response = _userService.Register(model);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
