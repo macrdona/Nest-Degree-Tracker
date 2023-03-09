@@ -29,9 +29,8 @@ namespace backend
                 {
                     var result = new ValidationFailedResult(context.ModelState);
 
-                    //responses are formatted to JSON and XML
+                    //responses are formatted to JSON
                     result.ContentTypes.Add(MediaTypeNames.Application.Json);
-                    result.ContentTypes.Add(MediaTypeNames.Application.Xml);
                     return result;
                 };
             });
