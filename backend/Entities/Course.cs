@@ -5,6 +5,7 @@ using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Entities
 {
@@ -21,4 +22,9 @@ namespace backend.Entities
         public string? Availability { get; set; }
     }
 
+    public class CourseRequest
+    {
+        [Required]
+        public string? CourseID { get; set; }
+    }
 }

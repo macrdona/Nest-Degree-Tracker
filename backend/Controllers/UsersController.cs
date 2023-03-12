@@ -70,15 +70,13 @@ namespace backend.Controllers
             return Ok(new { message = "User updated successfully" });
         }
 
-        [AllowAnonymous]
         [HttpGet("enrollment/{id}")]
         public IActionResult IsEnrolled(int id)
         {
             return Ok(_userService.IsEnrolled(id));
         }
 
-        [AllowAnonymous]
-        [HttpPost("enrollment/form")]
+        [HttpPost("enrollment")]
         public IActionResult Enrollment(EnrollmentForm form)
         {
             if (!ModelState.IsValid)

@@ -5,19 +5,22 @@ using backend.Helpers;
 using backend.Models;
 using BCrypt.Net;
 using AutoMapper;
+using System.Globalization;
 
 namespace backend.Services
 {
     public interface ICourseService
     {
-        Course getByID(string id);
+        Course GetByID(string id);
         
-        IEnumerable<Course> getAll();
+        IEnumerable<Course> GetAll();
+
+        IEnumerable<Course> GetMajorCourses(List<string> courses);
     }
     public class CourseService : ICourseService
     {
-        private DataContext _context;
-        private IJwtUtils _jwtUtils;
+        private readonly DataContext _context;
+        private readonly IJwtUtils _jwtUtils;
         private readonly IMapper _mapper;
 
         public CourseService(
@@ -31,19 +34,41 @@ namespace backend.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<Course> getAll()
+        public IEnumerable<Course> GetAll() => _context.Courses;
+
+        public Course GetByID(string id) => GetCourseById(id);
+
+        public Course GetByName(string name) => GetCourseByName(name);
+        
+        public IEnumerable<Course> GetMajorCourses(List<string> courses)
         {
-            return _context.Courses;
+            List<Course> list = new List<Course>();
+            
+            foreach (string course in courses)
+            {
+                try 
+                {
+                    list.Add(GetCourseById(course));
+                }
+                catch(KeyNotFoundException) 
+                {
+                    continue;
+                }
+                
+            }
+            return list.AsEnumerable<Course>();
         }
 
-        public Course getByID(string id)
+        private Course GetCourseById(string id)
         {
-            return getCourse(id);
+            var course = _context.Courses.FirstOrDefault(x => x.CourseID == id);
+            if (course == null) throw new KeyNotFoundException("Course not found");
+            return course;
         }
 
-        public Course getCourse(string id)
+        private Course GetCourseByName(string name)
         {
-            var course = _context.Courses.Find(id);
+            var course = _context.Courses.FirstOrDefault(x => x.CourseName == name);
             if (course == null) throw new KeyNotFoundException("Course not found");
             return course;
         }
