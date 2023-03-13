@@ -6,6 +6,7 @@ using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace backend.Controllers
 {
@@ -18,7 +19,7 @@ namespace backend.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-
+        
         public UsersController(
             IUserService userService,
             IMapper mapper,

@@ -28,14 +28,14 @@ public class CoursesController : ControllerBase
         _appSettings = appSettings.Value;
     }
 
-    [HttpGet("getById")]
+    [HttpGet("findCourse")]
     public IActionResult GetById(CourseRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        var course = _courseService.GetByID(request.CourseID);
+        var course = _courseService.GetByID(request.CourseId);
         return Ok(course);
     }
 

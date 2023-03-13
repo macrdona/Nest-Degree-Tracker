@@ -19,7 +19,7 @@ namespace backend.Migrations.SqliteMigrations
 
             modelBuilder.Entity("backend.Entities.Course", b =>
                 {
-                    b.Property<string>("CourseID")
+                    b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Availability")
@@ -40,7 +40,7 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("Prerequisites")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CourseID");
+                    b.HasKey("CourseId");
 
                     b.ToTable("Courses");
                 });
@@ -66,9 +66,39 @@ namespace backend.Migrations.SqliteMigrations
                     b.ToTable("Enrollments");
                 });
 
+            modelBuilder.Entity("backend.Entities.MajorCourses", b =>
+                {
+                    b.Property<string>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("MajorCourses");
+                });
+
+            modelBuilder.Entity("backend.Entities.Majors", b =>
+                {
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Degree")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MajorId");
+
+                    b.ToTable("Majors");
+                });
+
             modelBuilder.Entity("backend.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -84,7 +114,7 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });

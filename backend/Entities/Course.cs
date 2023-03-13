@@ -11,7 +11,7 @@ namespace backend.Entities
 {
     public class Course
     {
-        public string? CourseID { get; set; }
+        public string? CourseId { get; set; }
         public string? CourseName { get; set; }
         public int? Credits { get; set; }
 
@@ -25,6 +25,6 @@ namespace backend.Entities
     public class CourseRequest
     {
         [Required]
-        public string? CourseID { get; set; }
+        public string? CourseId { get; set; }
     }
 }

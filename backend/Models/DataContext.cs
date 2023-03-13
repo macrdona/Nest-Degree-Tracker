@@ -21,5 +21,7 @@ namespace backend.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<EnrollmentForm> Enrollments { get; set; }
+        public DbSet<Majors> Majors { get; set; }
+        public DbSet<MajorCourses> MajorCourses { get; set; }
     }
 }

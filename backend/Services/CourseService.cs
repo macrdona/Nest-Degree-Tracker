@@ -15,7 +15,6 @@ namespace backend.Services
         
         IEnumerable<Course> GetAll();
 
-        IEnumerable<Course> GetMajorCourses(List<string> courses);
     }
     public class CourseService : ICourseService
     {
@@ -39,29 +38,10 @@ namespace backend.Services
         public Course GetByID(string id) => GetCourseById(id);
 
         public Course GetByName(string name) => GetCourseByName(name);
-        
-        public IEnumerable<Course> GetMajorCourses(List<string> courses)
-        {
-            List<Course> list = new List<Course>();
-            
-            foreach (string course in courses)
-            {
-                try 
-                {
-                    list.Add(GetCourseById(course));
-                }
-                catch(KeyNotFoundException) 
-                {
-                    continue;
-                }
-                
-            }
-            return list.AsEnumerable<Course>();
-        }
 
         private Course GetCourseById(string id)
         {
-            var course = _context.Courses.FirstOrDefault(x => x.CourseID == id);
+            var course = _context.Courses.FirstOrDefault(x => x.CourseId == id);
             if (course == null) throw new KeyNotFoundException("Course not found");
             return course;
         }
@@ -72,5 +52,6 @@ namespace backend.Services
             if (course == null) throw new KeyNotFoundException("Course not found");
             return course;
         }
+
     }
 }

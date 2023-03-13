@@ -14,19 +14,25 @@ using Microsoft.Extensions.Options;
 [Authorize]
 public class MajorsController : Controller
 {
-    private readonly ICourseService _courseService;
+    private readonly IMajorService _majorService;
 
-    public MajorsController(ICourseService courseService)
+    public MajorsController(IMajorService majorService)
     {
-        _courseService = courseService;
+        _majorService = majorService;
    
     }
 
-    [HttpGet("CS")]
-    public IActionResult GetComputerScience()
+    [HttpGet]
+    public IActionResult GetMajor(MajorSelectionRequest model)
     {
-        var courses = _courseService.GetMajorCourses(ComputerScience.Courses());
-        return Ok(courses);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var response = _majorService.GetMajorCourses(model.MajorName);
+
+        return Ok(response);
     }
 }
 
