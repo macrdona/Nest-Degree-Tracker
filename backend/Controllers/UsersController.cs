@@ -6,6 +6,7 @@ using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace backend.Controllers
 {
@@ -18,7 +19,7 @@ namespace backend.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-
+        
         public UsersController(
             IUserService userService,
             IMapper mapper,
@@ -52,8 +53,8 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            _userService.Register(model);
-            return Ok(new { message = "Registration successful" });
+            var response = _userService.Register(model);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -68,6 +69,25 @@ namespace backend.Controllers
         {
             _userService.Update(id, model);
             return Ok(new { message = "User updated successfully" });
+        }
+
+        [HttpGet("enrollment/{id}")]
+        public IActionResult IsEnrolled(int id)
+        {
+            return Ok(_userService.IsEnrolled(id));
+        }
+
+        [HttpPost("enrollment")]
+        public IActionResult Enrollment(EnrollmentForm form)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var response = _userService.EnrollmentForm(form);
+
+            return Ok(response);
         }
     }
 }

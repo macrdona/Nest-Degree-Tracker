@@ -11,8 +11,8 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230211042948_SecondMigration")]
-    partial class SecondMigration
+    [Migration("20230313003640_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace backend.Migrations.SqliteMigrations
 
             modelBuilder.Entity("backend.Entities.Course", b =>
                 {
-                    b.Property<string>("CourseID")
+                    b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Availability")
@@ -42,14 +42,65 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("Prerequisites")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CourseID");
+                    b.HasKey("CourseId");
 
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("backend.Entities.EnrollmentForm", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Question1")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("backend.Entities.MajorCourses", b =>
+                {
+                    b.Property<string>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("MajorCourses");
+                });
+
+            modelBuilder.Entity("backend.Entities.Majors", b =>
+                {
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Degree")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MajorId");
+
+                    b.ToTable("Majors");
+                });
+
             modelBuilder.Entity("backend.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -65,7 +116,7 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });

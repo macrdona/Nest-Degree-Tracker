@@ -13,9 +13,12 @@ namespace backend.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         User GetById(int id);
-        void Register(RegisterRequest model);
+        AuthenticateResponse Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
         void Delete(int id);
+
+        EnrollmentCompleted IsEnrolled(int id);
+        EnrollmentCompleted EnrollmentForm(EnrollmentForm form);
     }
 
     public class UserService : IUserService
@@ -54,7 +57,7 @@ namespace backend.Services
             return getUser(id);
         }
 
-        public void Register(RegisterRequest model)
+        public AuthenticateResponse Register(RegisterRequest model)
         {
             // validate username
             if (_context.Users.Any(x => x.Username == model.Username))
@@ -69,6 +72,11 @@ namespace backend.Services
             // save user
             _context.Users.Add(user);
             _context.SaveChanges();
+
+            var response = _mapper.Map<AuthenticateResponse>(user);
+            response.Token = _jwtUtils.GenerateToken(user);
+
+            return response;
         }
 
         public void Update(int id, UpdateRequest model)
@@ -102,6 +110,26 @@ namespace backend.Services
             var user = _context.Users.Find(id);
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
+        }
+
+        public EnrollmentCompleted IsEnrolled(int id)
+        {
+            bool enrolled = _context.Enrollments.Find(id) != null;
+
+            if (!enrolled)
+            {
+                throw new AppException("User has not completed enrollment");
+            }
+
+            return new EnrollmentCompleted { Completed = enrolled, Message = "User has already completed enrollment" };
+        }
+
+        public EnrollmentCompleted EnrollmentForm(EnrollmentForm form)
+        {
+            _context.Enrollments.Add(form);
+            _context.SaveChanges();
+            return (new EnrollmentCompleted { Completed = true, Message = "Enrollment has been completed" });
+
         }
     }
 }

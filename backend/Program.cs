@@ -54,6 +54,7 @@ namespace backend
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IMajorService, MajorService>();
 
             var app = builder.Build();
 
