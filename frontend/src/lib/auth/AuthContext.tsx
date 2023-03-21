@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { User } from "../api/types";
-import jwt, { TokenExpiredError } from "jsonwebtoken"
+import { decodeToken} from "react-jwt"
 import { toast } from "react-toastify";
 
 export interface AuthContextValue {
@@ -24,15 +24,15 @@ export function AuthProvider(props: PropsWithChildren) {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const login = (token: string) => {
-    try {
-        const decoded = jwt.decode(token);
-
+    const decoded = decodeToken(token);
+    if (decoded !== null) {
+        localStorage.setItem("token", token);
         setUser(decoded as User);
         setToken(token);
         setLoggedIn(true);
 
         toast.success("Logged in.");
-    } catch (err) {
+    } else {
         toast.error("Invalid token, please log in again.");
         logout();
     }
