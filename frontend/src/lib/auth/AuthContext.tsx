@@ -30,8 +30,6 @@ export function AuthProvider(props: PropsWithChildren) {
         setUser(decoded as User);
         setToken(token);
         setLoggedIn(true);
-
-        toast.success("Logged in.");
     } else {
         toast.error("Invalid token, please log in again.");
         logout();
