@@ -33,7 +33,7 @@ namespace backend.Authorization
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserId.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserId.ToString()), new Claim("username", user.Username.ToString()), new Claim("firstname", user.FirstName.ToString()), new Claim("lastname", user.LastName.ToString()), new Claim("completed", user.Completed.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

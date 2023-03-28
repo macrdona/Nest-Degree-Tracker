@@ -11,7 +11,6 @@ namespace backend.Entities
         public string? MajorName { get; set; }
         public string? Degree { get; set; }
         public string? Description { get; set; }
-
     }
 
     [Keyless]

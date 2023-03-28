@@ -51,14 +51,16 @@ namespace backend.Migrations.SqliteMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Completed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Question1")
+                    b.Property<string>("Courses")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Major")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Minor")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
@@ -100,6 +102,9 @@ namespace backend.Migrations.SqliteMigrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")

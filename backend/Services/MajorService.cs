@@ -36,6 +36,7 @@ namespace backend.Services
 
         public IEnumerable<Course> GetMajorCourses(string majorName)
         {
+            //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
 
             if ( major == null )
@@ -43,6 +44,7 @@ namespace backend.Services
                 throw new KeyNotFoundException("Major not found");
             }
 
+            //grabs all courses from specified major
             var majorCourses = _context.MajorCourses.Where(x => x.MajorId == major.MajorId).ToList();
             
             List<string> courses = new List<string>();

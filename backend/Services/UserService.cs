@@ -16,9 +16,7 @@ namespace backend.Services
         AuthenticateResponse Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
         void Delete(int id);
-
-        EnrollmentCompleted IsEnrolled(int id);
-        EnrollmentCompleted EnrollmentForm(EnrollmentForm form);
+        EnrollmentResponse EnrollmentForm(EnrollmentForm form);
     }
 
     public class UserService : IUserService
@@ -112,23 +110,20 @@ namespace backend.Services
             return user;
         }
 
-        public EnrollmentCompleted IsEnrolled(int id)
+        public EnrollmentResponse EnrollmentForm(EnrollmentForm form)
         {
-            bool enrolled = _context.Enrollments.Find(id) != null;
+            var user = _context.Users.Find(form.UserId);
 
-            if (!enrolled)
-            {
-                throw new AppException("User has not completed enrollment");
-            }
+            if (user == null) throw new KeyNotFoundException();
 
-            return new EnrollmentCompleted { Completed = enrolled, Message = "User has already completed enrollment" };
-        }
+            if ((bool)user.Completed) throw new AppException("User has already completed the form");
 
-        public EnrollmentCompleted EnrollmentForm(EnrollmentForm form)
-        {
+            user.Completed = true;
+
             _context.Enrollments.Add(form);
             _context.SaveChanges();
-            return (new EnrollmentCompleted { Completed = true, Message = "Enrollment has been completed" });
+
+            return new EnrollmentResponse { Message = "Enrollment has been completed" };
 
         }
     }
