@@ -36,6 +36,7 @@ export function AuthProvider(props: PropsWithChildren) {
     const decoded: User | null = decodeToken(token) as User | null;
     const expired = isExpired(token);
     if (decoded && !expired) {
+      localStorage.setItem("token", token);
       setUser(decoded);
       setToken(token);
       setLoggedIn(true);
