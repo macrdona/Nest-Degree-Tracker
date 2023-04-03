@@ -10,18 +10,13 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-    id: number,
-    firstName: string,
-    lastName: string,
-    username: string,
-    token: string
+  token: string;
 }
 
 export const useLogin = () => {
+  // TODO add auth context, logic here for setting token on successful login
 
-    // TODO add auth context, logic here for setting token on successful login
-
-    const { login } = useAuth();
+  const { login, user } = useAuth();
   return useMutation<LoginResponse, ErrorResponse, LoginPayload>(
     ["/Users/login"],
     async (payload) => {
@@ -34,10 +29,10 @@ export const useLogin = () => {
     },
     {
       onSuccess: (data) => {
-        toast.success(`Welcome, ${data.firstName}!`);
         login(data.token);
+        toast.success("Logged in.");
       },
-      onError: ({ response}) => {
+      onError: ({ response }) => {
         toast.error(response?.data?.message ?? "Unknown Error.");
       },
     }

@@ -43,7 +43,7 @@ function SelectMajor() {
             <option value="3">Physical Therapy</option>
           </select>
         </div>
-        <button className="btn btn-primary btn-lg mt-3 fs-2 mw-75 align-self-center text-nowrap">
+        <button className="btn btn-secondary btn-lg mt-3 px-5 fs-2 align-self-center text-nowrap">
           Next
         </button>
       </div>

@@ -11,10 +11,17 @@ export interface ErrorDescription {
   message?: string;
 }
 
+export interface UserToken {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  completed: string;
+}
 export interface User {
   id: number;
   username: string;
-  firstname: string;
-  lastname: string;
-  completed: string;
+  firstName: string;
+  lastName: string;
+  completed: boolean;
 }

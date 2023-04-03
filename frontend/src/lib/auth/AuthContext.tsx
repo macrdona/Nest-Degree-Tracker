@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { User } from "../api/types";
+import { User, UserToken } from "../api/types";
 import { decodeToken, isExpired } from "react-jwt";
 import { toast } from "react-toastify";
 
@@ -33,15 +33,22 @@ export function AuthProvider(props: PropsWithChildren) {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const login = (token: string) => {
-    const decoded: User | null = decodeToken(token) as User | null;
+    const decoded: UserToken | null = decodeToken(token) as UserToken | null;
+
     const expired = isExpired(token);
     if (decoded && !expired) {
+      const user: User = {
+        firstName: decoded.firstName,
+        id: decoded.id,
+        lastName: decoded.lastName,
+        username: decoded.username,
+        completed: decoded?.completed === "True",
+      };
       localStorage.setItem("token", token);
-      setUser(decoded);
+      setUser(user);
       setToken(token);
       setLoggedIn(true);
-      console.log(decoded);
-      toast.success("Logged in.");
+      console.log(user);
     } else {
       toast.error("Invalid token, please log in again.");
       logout();
