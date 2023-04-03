@@ -6,7 +6,8 @@ namespace backend.Entities
     //base User Model
     public class User
     {
-        public int Id { get; set; }
+        [Key]
+        public int UserId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
@@ -43,7 +44,8 @@ namespace backend.Entities
     //user model for authenticating a response
     public class AuthenticateResponse
     {
-        public int Id { get; set; }
+        [Key]
+        public int UserId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }

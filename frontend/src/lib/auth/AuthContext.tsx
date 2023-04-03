@@ -6,7 +6,11 @@ import {
   useState,
 } from "react";
 import { User } from "../api/types";
+<<<<<<< HEAD
 import { decodeToken, isExpired } from "react-jwt";
+=======
+import { decodeToken} from "react-jwt"
+>>>>>>> 9f3a16d5f92839935b15785f269b4db21e9eff98
 import { toast } from "react-toastify";
 
 export interface AuthContextValue {

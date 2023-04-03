@@ -14,8 +14,8 @@ using Microsoft.Extensions.Options;
 [Authorize]
 public class CoursesController : ControllerBase
 {
-    private ICourseService _courseService;
-    private IMapper _mapper;
+    private readonly ICourseService _courseService;
+    private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
 
     public CoursesController(
@@ -28,17 +28,21 @@ public class CoursesController : ControllerBase
         _appSettings = appSettings.Value;
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetById(string courseId)
+    [HttpGet("findCourse")]
+    public IActionResult GetById(CourseRequest request)
     {
-        var course = _courseService.getByID(courseId);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var course = _courseService.GetByID(request.CourseId);
         return Ok(course);
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var courses = _courseService.getAll();
+        var courses = _courseService.GetAll();
         return Ok(courses);
     }
 }

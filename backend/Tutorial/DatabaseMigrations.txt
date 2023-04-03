@@ -1,0 +1,1 @@
+dotnet ef migrations add [name] --context [Database Context Class] --output-dir [Migration Path]
