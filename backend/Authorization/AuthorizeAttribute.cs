@@ -22,8 +22,7 @@ namespace backend.Authorization
             /*
              * This block checks if a user is attached to the current request. 
              * 
-             * If the user is authenticated, the user should be attached to the incoming request by the JWT Middleware, but 
-             * only if the request contains a valid JWT Token.
+             * JWTMiddleware is invoked first to validate the JWT token. If user attached to the token exists, then authorize access. 
              */
             var user = (User)context.HttpContext.Items["User"];
             if (user == null)
