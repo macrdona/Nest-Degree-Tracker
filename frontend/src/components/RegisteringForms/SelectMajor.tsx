@@ -1,20 +1,24 @@
 import React from "react";
 import Steps from "../../assets/steps-image-1.png";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./selectMajor.scss";
+import "./SelectMajor.scss";
 
 function SelectMajor() {
   return (
-    <div className="mainSection container d-flex justify-content-center">
-      <img src={Steps} />
+    <div className="select-major mainSection container d-flex justify-content-center">
+      <img src={Steps} className="steps-img" draggable={false} />
       <div className="form">
         <div className="form-group">
           <label className="form-label">University or school:</label>
           <select className="form-select">
             <option selected>Select your school</option>
             <option value="1">University of North Florida</option>
-            <option value="2">University of Central Florida</option>
-            <option value="3">Florida State College of Jacksonville</option>
+            <option value="2" disabled>
+              University of Central Florida
+            </option>
+            <option value="3" disabled>
+              Florida State College of Jacksonville
+            </option>
           </select>
         </div>
         <div className="form-group">
@@ -22,8 +26,12 @@ function SelectMajor() {
           <select className="form-select">
             <option selected>Select your program of study</option>
             <option value="1">Computer Science</option>
-            <option value="2">Business</option>
-            <option value="3">Biology</option>
+            <option value="2" disabled>
+              Business
+            </option>
+            <option value="3" disabled>
+              Biology
+            </option>
           </select>
         </div>
         <div className="form-group">
