@@ -46,7 +46,7 @@ function CreateAccount() {
       // Display success and navigate to new page
       register({ username, firstName, lastName, password}, {
         onSuccess: () => {
-          navigate("/"); // Should navigate to onboarding screen
+          navigate("/"); // TODO: Should navigate to onboarding screen
         }
       })
 
@@ -54,7 +54,7 @@ function CreateAccount() {
   };
 
   return (
-    <div className="container-fluid flex-fill">
+    <div className="container-fluid flex-fill register-page">
       <div className="row no-gutters h-100 flex-fill">
         <div className="d-none d-lg-flex col background-container"></div>
         <div className="col col-lg-6 p-5 d-flex flex-column align-items-center shadow-lg">
