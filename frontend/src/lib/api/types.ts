@@ -10,3 +10,10 @@ export interface ErrorDescription {
     field?: string
     message?: string
 }
+
+export interface User {
+    id: number,
+    username: string,
+    firstName: string,
+    lastName: string
+}

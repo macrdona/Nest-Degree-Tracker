@@ -1,6 +1,6 @@
 import { ErrorResponse } from "./types";
 import { useMutation } from "@tanstack/react-query";
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import { toast } from "react-toastify";
 
 export interface RegisterPayload {
@@ -27,7 +27,6 @@ export const useRegister = () => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         toast.success("Registered successfully!");
       },
       onError: ({ response}) => {
