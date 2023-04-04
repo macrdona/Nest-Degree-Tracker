@@ -15,7 +15,7 @@
 ## Database Setup 
 
 1. Download https://sqlitebrowser.org/dl/
-2. Create test.db file in the Database folder
+2. In the backend directory, create a folder named 'Database' and add a test.db file.
 3. Open Visual Studio and run application to apply DatabaseMigrations
    - Migrations will export the Entities and Models as tables in the database
 4. If there are changes that need to be updated in the database:
