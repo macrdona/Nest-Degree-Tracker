@@ -1,42 +1,76 @@
-import React from 'react';
-import Steps from './assets/steps-image-1.png';
+import React, {useState} from 'react';
+import { toast } from "react-toastify";
+import Steps from '../../assets/steps-image-1.png';
 import "bootstrap/dist/css/bootstrap.min.css";
-import './selectMajor.scss';
+import './SelectMajor.scss';
 
 function selectMajor() {
+
+    const [major, setMajor] = useState("");
+    const [minor, setMinor] = useState("");
+
+    let majors = [ //all of this is a placeholder for the real list from the database
+        {name: "Computer science"},
+        {name: "Business"},
+        {name: "Biology"},
+        {name: "Health Administration"}
+    ]
+    let minors = [ //all of this is a placeholder for the real list from the database
+        {name: "None"},
+        {name: "Computer science"},
+        {name: "Business"},
+        {name: "Biology"},
+        {name: "International Studies"}
+    ]
+
+    const validate = (): boolean => {
+        // Passwords don't match
+        if (major === "" || minor === "") {
+            toast.error("Missing one or more required fields.");
+            return false;
+        }
+        console.log(major, minor);
+        return true;
+    };
+
+    const handleSubmit = () => {
+        if(validate()){
+            //send information to database and continue to next page
+            //set up link for the next page
+        }
+    };
+
+    //add code to get majors list here
+    //currently getting a 401 unauthorized error, have to get a token/get authorized from unmerged section
+    /*async function fetchMajors(){
+        const response = await fetch('http://localhost:4000/Majors');
+        const majorData = await response.json();
+        console.log(majorData);
+    }
+    fetchMajors();*/
+
+
     return(
         <div className="mainSection container d-flex justify-content-center">
             <img src={Steps}/>
             <div className="form">
                 <div className="form-group">
-                    <label className= "form-label">University or school:</label>
-                    <select className="form-select">
-                        <option selected>Select your school</option>
-                        <option value="1">University of North Florida</option>
-                        <option value="2">University of Central Florida</option>
-                        <option value="3">Florida State College of Jacksonville</option>
-                    </select>
-                </div>
-                <div className="form-group">
                     <label className= "form-label">Major:</label>
-                    <select className="form-select">
-                        <option selected>Select your program of study</option>
-                        <option value="1">Computer Science</option>
-                        <option value="2">Business</option>
-                        <option value="3">Biology</option>
+                    <select className="form-select" onChange = {(e) => setMajor(e.target.value)}>
+                        <option disabled selected>Select your program of study</option>
+                        {majors.map((major) => <option key={major.name} value={major.name}>{major.name}</option>)}
                     </select>
                 </div>
                 <div className="form-group">
                     <label className= "form-label">Minor:</label>
-                    <select className="form-select">
-                        <option selected>Select your minor</option>
-                        <option value="1">N/A</option>
-                        <option value="2">Business Administration</option>
-                        <option value="3">Physical Therapy</option>
+                    <select className="form-select" onChange = {(e) => setMinor(e.target.value)}>
+                        <option disabled selected>Select your minor</option>
+                        {minors.map((minor) => <option key={minor.name} value={minor.name}>{minor.name}</option>)}
                     </select>
                 </div>
                 <button
-                    className="btn btn-primary btn-lg mt-3 fs-2 mw-75 align-self-center text-nowrap">
+                    onClick={(e) => {handleSubmit();}}
+                    className="btn btn-primary btn-lg mt-3 fs-2 mw-75 align-self-center text-nowrap" type="submit">
                     Next
                 </button>
             </div>

@@ -1,8 +1,8 @@
 import React from "react";
-import SelectMajor from "../SelectMajor";
+import SelectMajor from "./SelectMajor";
 
 export default{
-    title: "selectMajor",
+    title: "SelectMajor",
     component: SelectMajor
 }
 export const primary = () => <SelectMajor />
