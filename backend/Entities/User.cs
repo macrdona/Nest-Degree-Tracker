@@ -11,6 +11,7 @@ namespace backend.Entities
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
+        public bool Completed { get; set; } = false;
 
         [JsonIgnore]
         public string? PasswordHash { get; set; }
@@ -44,10 +45,13 @@ namespace backend.Entities
     //user model for authenticating a response
     public class AuthenticateResponse
     {
-        [Key]
+        [JsonIgnore]
         public int UserId { get; set; }
+        [JsonIgnore]
         public string? FirstName { get; set; }
+        [JsonIgnore]
         public string? LastName { get; set; }
+        [JsonIgnore]
         public string? Username { get; set; }
         public string? Token { get; set; }
     }

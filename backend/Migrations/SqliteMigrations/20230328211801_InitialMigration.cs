@@ -31,9 +31,9 @@ namespace backend.Migrations.SqliteMigrations
                 {
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", nullable: true),
-                    Completed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Question1 = table.Column<string>(type: "TEXT", nullable: false)
+                    Major = table.Column<string>(type: "TEXT", nullable: false),
+                    Minor = table.Column<string>(type: "TEXT", nullable: false),
+                    Courses = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,6 +74,7 @@ namespace backend.Migrations.SqliteMigrations
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     Username = table.Column<string>(type: "TEXT", nullable: true),
+                    Completed = table.Column<bool>(type: "INTEGER", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

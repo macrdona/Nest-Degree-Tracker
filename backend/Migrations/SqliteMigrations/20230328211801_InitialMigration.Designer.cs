@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Models;
 
@@ -10,9 +11,10 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230328211801_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
@@ -73,17 +75,16 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MajorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
 
                     b.ToTable("MajorCourses");
                 });
 
             modelBuilder.Entity("backend.Entities.Majors", b =>
                 {
-                    b.Property<int>("MajorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("MajorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Degree")
                         .HasColumnType("TEXT");
