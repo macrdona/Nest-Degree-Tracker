@@ -3,7 +3,7 @@ import SelectMajor from "./SelectMajor";
 import { Story } from "@storybook/react";
 
 export default {
-  title: "selectMajor",
+  title: "SelectMajor",
   component: SelectMajor,
 };
 const Template: Story<typeof SelectMajor> = (props) => (
