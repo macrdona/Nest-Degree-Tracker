@@ -3,3 +3,4 @@ obj
 bin
 
 .venv
+/backend/Database/test.db
