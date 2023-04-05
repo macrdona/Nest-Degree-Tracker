@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./CreateAccount.scss";
 import { useRegister } from "../../lib/api";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../lib/auth/AuthContext";
 
 function CreateAccount() {
   const [firstName, setFirstName] = useState("");
@@ -15,7 +16,9 @@ function CreateAccount() {
   const { mutate: register } = useRegister();
 
   const navigate = useNavigate();
-  
+
+  const { login } = useAuth();
+
   const validate = (): boolean => {
     // Passwords don't match
     if (password !== confirmPassword) {
@@ -44,17 +47,20 @@ function CreateAccount() {
     if (validate()) {
       // Logic for sending API request
       // Display success and navigate to new page
-      register({ username, firstName, lastName, password}, {
-        onSuccess: () => {
-          navigate("/"); // Should navigate to onboarding screen
+      register(
+        { username, firstName, lastName, password },
+        {
+          onSuccess: ({ token }) => {
+            login(token);
+            navigate("/"); // TODO: Should navigate to onboarding screen
+          },
         }
-      })
-
+      );
     }
   };
 
   return (
-    <div className="container-fluid flex-fill">
+    <div className="container-fluid flex-fill register-page">
       <div className="row no-gutters h-100 flex-fill">
         <div className="d-none d-lg-flex col background-container"></div>
         <div className="col col-lg-6 p-5 d-flex flex-column align-items-center shadow-lg">
@@ -63,10 +69,7 @@ function CreateAccount() {
             <form className="form d-flex flex-column gap-2 w-100" noValidate>
               <div className="row g-2">
                 <div className="col-6 form-group">
-                  <label
-                    htmlFor="firstName"
-                    className="form-label fs-5"
-                  >
+                  <label htmlFor="firstName" className="form-label fs-5">
                     First Name
                   </label>
                   <input
@@ -80,10 +83,7 @@ function CreateAccount() {
                   />
                 </div>
                 <div className="col-6 form-group">
-                  <label
-                    htmlFor="lastName"
-                    className="form-label fs-5"
-                  >
+                  <label htmlFor="lastName" className="form-label fs-5">
                     Last Name
                   </label>
                   <input
@@ -99,10 +99,7 @@ function CreateAccount() {
               </div>
 
               <div className="form-group w-100">
-                <label
-                  htmlFor="username"
-                  className="form-label fs-5"
-                >
+                <label htmlFor="username" className="form-label fs-5">
                   Username
                 </label>
                 <input
@@ -117,10 +114,7 @@ function CreateAccount() {
               </div>
 
               <div className="form-group w-100">
-                <label
-                  htmlFor="password"
-                  className="form-label  fs-5"
-                >
+                <label htmlFor="password" className="form-label  fs-5">
                   Password
                 </label>
                 <input
@@ -135,10 +129,7 @@ function CreateAccount() {
               </div>
 
               <div className="form-group w-100">
-                <label
-                  htmlFor="confirmPassword"
-                  className="form-label fs-5"
-                >
+                <label htmlFor="confirmPassword" className="form-label fs-5">
                   Confirm Password
                 </label>
                 <input

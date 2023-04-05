@@ -11,8 +11,8 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230313003640_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230404161037_MigrationChanges1.0")]
+    partial class MigrationChanges10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,14 +53,16 @@ namespace backend.Migrations.SqliteMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Completed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Question1")
+                    b.Property<string>("Courses")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Major")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Minor")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
@@ -73,16 +75,17 @@ namespace backend.Migrations.SqliteMigrations
                     b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("MajorId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MajorId")
+                        .HasColumnType("INTEGER");
 
                     b.ToTable("MajorCourses");
                 });
 
             modelBuilder.Entity("backend.Entities.Majors", b =>
                 {
-                    b.Property<string>("MajorId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MajorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Degree")
                         .HasColumnType("TEXT");
@@ -102,6 +105,9 @@ namespace backend.Migrations.SqliteMigrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")

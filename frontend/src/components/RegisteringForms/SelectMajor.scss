@@ -1,46 +1,9 @@
-.mainSection{
-  //background-color: #61dafb;
-  margin-top: 87px;
-  position: relative;
-}
-.form{
-  //background-color: lightpink;
-  position: absolute;
-  margin-top: 300px;
-  text-align: center;
-}
-.form-select{
-  min-width: 1076px;
-  height: 72px;
-  margin-bottom: 39px;
-  background: #F4F4F4;
-  border: 1px solid #9C9C9C;
-  border-radius: 6px;
-}
-.form-group{
-  //background-color: aquamarine;
-  text-align: left;
-}
-.form-label{
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 35px;
-  line-height: 47px;
-}
-.form-select{
-  font-size: 20px;
-}
-.btn{
-  background: #0B233F;
-  border-radius: 18px;
-  width: 222.89px;
-  height: 74px;
-}
-.btn text{
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 49px;
+.select-major {
+  .steps-img {
+    user-select: none;
+  }
+  .form-group {
+    //background-color: aquamarine;
+    text-align: left;
+  }
 }

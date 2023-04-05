@@ -4,7 +4,7 @@ using backend.Models;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
-
+using Microsoft.OpenApi.Models;
 namespace backend
 {
     public class Program
@@ -37,7 +37,34 @@ namespace backend
 
             //allow use of swagger for API testing
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+                {
+
+                    // Enables JWT authentication on swagger so we can test out the endpoints more easily
+                    // This will display an "Authorize" button, click it and enter in a valid JWT token
+                    options.AddSecurityDefinition("Bearer",
+                        new OpenApiSecurityScheme
+                        {
+                            Description = "JWT Authorization",
+                            In = ParameterLocation.Header,
+                            Name = "Authorization",
+                            Type = SecuritySchemeType.ApiKey
+                        }
+                    );
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                        },
+                        new string[] { }
+                        }
+                    });
+                });
 
             // configure automapper with all automapper profiles from this assembly
             services.AddAutoMapper(typeof(Program));
@@ -65,7 +92,7 @@ namespace backend
                 dataContext.Database.Migrate();
             }
 
-            if(app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
