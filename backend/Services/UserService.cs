@@ -17,6 +17,8 @@ namespace backend.Services
         void Update(int id, UpdateRequest model);
         void Delete(int id);
         EnrollmentResponse EnrollmentForm(EnrollmentForm form);
+
+        EnrollmentForm UserEnrollment(int id);
     }
 
     public class UserService : IUserService
@@ -124,6 +126,14 @@ namespace backend.Services
             _context.SaveChanges();
 
             return new EnrollmentResponse { Message = "Enrollment has been completed" };
+
+        }
+
+        public EnrollmentForm UserEnrollment(int userId)
+        {
+            var user = _context.Enrollments.Find(userId);
+            if (user == null) throw new KeyNotFoundException("User not found");
+            return user;
 
         }
     }

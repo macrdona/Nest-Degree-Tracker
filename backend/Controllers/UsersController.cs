@@ -19,15 +19,18 @@ namespace backend.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-        
+        private readonly IHttpContextAccessor _context;
+
         public UsersController(
             IUserService userService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            IHttpContextAccessor context)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _context = context;
         }
 
         //Ok() will return a response with a status code and formatted data
@@ -60,6 +63,8 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+
             var user = _userService.GetById(id);
             return Ok(user);
         }
@@ -67,6 +72,8 @@ namespace backend.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, UpdateRequest model)
         {
+            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+
             _userService.Update(id, model);
             return Ok(new { message = "User updated successfully" });
         }
@@ -80,6 +87,15 @@ namespace backend.Controllers
             }
 
             var response = _userService.EnrollmentForm(form);
+
+            return Ok(response);
+        }
+
+        [HttpGet("enrollment/{id}")]
+        public IActionResult UserEnrollment(int id)
+        {
+            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+            var response = _userService.UserEnrollment(id);
 
             return Ok(response);
         }

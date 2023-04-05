@@ -22,8 +22,16 @@ namespace backend.Authorization
 
             if (userId != null)
             {
-                // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId.Value);
+                try
+                {
+                    // attach user to context on successful jwt validation
+                    context.Items["User"] = userService.GetById(userId.Value);
+                }
+                catch(Exception ex) 
+                {
+                    throw new AppException(ex.Message);
+                }
+               
             }
 
             await _next(context);
