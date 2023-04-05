@@ -1,7 +1,7 @@
 import sqlite3 as sq
 import pandas as pd
 
-connection = sq.connect(r"C:\\Users\\gabim\source\\repos\Software-Engineering-Group-6\backend\Database\\test.db")
+connection = sq.connect(__name__ + "../../../backend/Database/test.db")
 
 majors = {
     0:{
