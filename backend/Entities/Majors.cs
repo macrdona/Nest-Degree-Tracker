@@ -20,10 +20,5 @@ namespace backend.Entities
         public string? CourseId { get; set; }
 
     }
-    public class MajorSelectionRequest
-    {
-        [Required]
-        public string? MajorName { get; set; }
-    }   
 
 }
