@@ -81,12 +81,15 @@ namespace backend.Services
 
         public void FindRecommendations(List<string> courses, Course course, List<Course> recommendations)
         {
-            string[] prereqs = course.Prerequisites.Split(",");
-            foreach (string prereq in prereqs)
+            if (!courses.Contains(course.CourseId))
             {
-                if (courses.Contains(prereq))
+                string[] prereqs = course.Prerequisites.Split(",");
+                foreach (string prereq in prereqs)
                 {
-                    recommendations.Add(course);
+                    if (courses.Contains(prereq))
+                    {
+                        recommendations.Add(course);
+                    }
                 }
             }
         }
