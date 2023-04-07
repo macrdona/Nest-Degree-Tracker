@@ -6,6 +6,8 @@ using backend.Models;
 using BCrypt.Net;
 using AutoMapper;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace backend.Services
 {
@@ -14,6 +16,8 @@ namespace backend.Services
         Course GetByID(string id);
         
         IEnumerable<Course> GetAll();
+
+        IEnumerable<Course> CourseRecommendations(int id);
 
     }
     public class CourseService : ICourseService
@@ -53,5 +57,38 @@ namespace backend.Services
             return course;
         }
 
+        public IEnumerable<Course> CourseRecommendations(int id)
+        {
+            var user = _context.Users.Find(id);
+            if(user == null) throw new KeyNotFoundException("User not found");
+
+            var courses = _context.CompletedCourses.Where(x => x.UserId == id);
+            List<string> courses_taken = new List<string>();
+            foreach (var course in courses)
+            {
+                courses_taken.Add(course.CourseId);
+            }
+
+            var results = _context.Courses;
+            List<Course> recommendations = new List<Course>();
+            foreach(Course course in results)
+            {
+                FindRecommendations(courses_taken, course, recommendations);
+            }
+
+            return recommendations;
+        }
+
+        public void FindRecommendations(List<string> courses, Course course, List<Course> recommendations)
+        {
+            string[] prereqs = course.Prerequisites.Split(",");
+            foreach (string prereq in prereqs)
+            {
+                if (courses.Contains(prereq))
+                {
+                    recommendations.Add(course);
+                }
+            }
+        }
     }
 }

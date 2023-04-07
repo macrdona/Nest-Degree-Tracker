@@ -21,7 +21,7 @@ namespace backend.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EnrollmentCompletedCourses>()
-                .HasKey(k => new { k.UserId, k.Course });
+                .HasKey(k => new { k.UserId, k.CourseId });
 
             modelBuilder.Entity<MajorCourses>()
                 .HasKey(k => new { k.MajorId, k.CourseId });

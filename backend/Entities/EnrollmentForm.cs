@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -33,15 +34,16 @@ namespace backend.Entities
 
     public class EnrollmentCompletedCourses
     {
+        public EnrollmentCompletedCourses() { }
         public EnrollmentCompletedCourses(int userId, string course)
         {
             UserId = userId;
-            Course = course;
+            CourseId = course;
         }
 
         public int UserId { get; set; }
 
-        public string? Course { get; set; }
+        public string? CourseId { get; set; }
     }
 
     public class EnrollmentResponse

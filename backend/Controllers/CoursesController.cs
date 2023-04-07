@@ -17,15 +17,18 @@ public class CoursesController : ControllerBase
     private readonly ICourseService _courseService;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
+    private readonly User _userContext;
 
     public CoursesController(
         ICourseService courseService,
         IMapper mapper,
-        IOptions<AppSettings> appSettings)
+        IOptions<AppSettings> appSettings,
+        IHttpContextAccessor context)
     {
         _courseService = courseService;
         _mapper = mapper;
         _appSettings = appSettings.Value;
+        _userContext = (User)context.HttpContext.Items["User"];
     }
 
     [HttpGet("{id}")]
@@ -40,5 +43,12 @@ public class CoursesController : ControllerBase
     {
         var courses = _courseService.GetAll();
         return Ok(courses);
+    }
+
+    [HttpGet("recommendations")]
+    public IActionResult Recommendations()
+    {
+        var response = _courseService.CourseRecommendations(_userContext.UserId);
+        return Ok(response);
     }
 }
