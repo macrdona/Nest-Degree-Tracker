@@ -21,4 +21,9 @@ namespace backend.Entities
         public string? Description { get; set; }
         public string? Availability { get; set; }
     }
+
+    public class Recommendations
+    {
+        public List<Course>? Courses { get; set; }
+    }
 }
