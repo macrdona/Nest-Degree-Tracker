@@ -15,6 +15,8 @@ namespace backend.Helpers
             // RegisterRequest -> User
             CreateMap<RegisterRequest, User>();
 
+            CreateMap<EnrollmentFormRequest, EnrollmentForm>();
+
             // UpdateRequest -> User
             CreateMap<UpdateRequest, User>()
                 .ForAllMembers(x => x.Condition(

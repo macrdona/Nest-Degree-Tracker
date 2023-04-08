@@ -5,12 +5,11 @@ namespace backend.Helpers
 {
     class UserAuthorization
     {
-        public static bool IsUser(IHttpContextAccessor _context, int id)
+        public static bool IsUser(User _userContext, int id)
         {
             try
             {
-                var user = (User)_context.HttpContext.Items["User"];
-                if (user.UserId == id) return true;
+                if (_userContext.UserId == id) return true;
 
             }
             catch {

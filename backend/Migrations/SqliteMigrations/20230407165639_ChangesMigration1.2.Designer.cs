@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Models;
 
@@ -10,9 +11,10 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230407165639_ChangesMigration1.2")]
+    partial class ChangesMigration12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
@@ -47,13 +49,11 @@ namespace backend.Migrations.SqliteMigrations
 
             modelBuilder.Entity("backend.Entities.EnrollmentCompletedCourses", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CourseId")
+                    b.Property<string>("Course")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "CourseId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.ToTable("CompletedCourses");
                 });
@@ -79,13 +79,11 @@ namespace backend.Migrations.SqliteMigrations
 
             modelBuilder.Entity("backend.Entities.MajorCourses", b =>
                 {
-                    b.Property<int>("MajorId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("MajorId", "CourseId");
+                    b.Property<int>("MajorId")
+                        .HasColumnType("INTEGER");
 
                     b.ToTable("MajorCourses");
                 });

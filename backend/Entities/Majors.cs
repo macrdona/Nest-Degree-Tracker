@@ -13,7 +13,7 @@ namespace backend.Entities
         public string? Description { get; set; }
     }
 
-    [Keyless]
+    
     public class MajorCourses
     {
         public int MajorId { get; set; }

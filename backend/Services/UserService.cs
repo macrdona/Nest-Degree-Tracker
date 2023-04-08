@@ -16,7 +16,7 @@ namespace backend.Services
         AuthenticateResponse Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
         void Delete(int id);
-        EnrollmentResponse EnrollmentForm(EnrollmentForm form);
+        EnrollmentResponse EnrollmentForm(EnrollmentFormRequest form);
 
         EnrollmentForm UserEnrollment(int id);
     }
@@ -112,17 +112,27 @@ namespace backend.Services
             return user;
         }
 
-        public EnrollmentResponse EnrollmentForm(EnrollmentForm form)
+        public EnrollmentResponse EnrollmentForm(EnrollmentFormRequest form)
         {
             var user = _context.Users.Find(form.UserId);
 
             if (user == null) throw new KeyNotFoundException();
 
             if ((bool)user.Completed) throw new AppException("User has already completed the form");
-
             user.Completed = true;
 
-            _context.Enrollments.Add(form);
+            var transfer_form = _mapper.Map<EnrollmentForm>(form);
+            _context.Enrollments.Add(transfer_form);
+            _context.SaveChanges();
+
+            List<CompletedCourses> courses = new List<CompletedCourses>(); 
+            var userId = form.UserId;
+            foreach(String course in form.Courses)
+            {
+                courses.Add(new CompletedCourses(userId,course));
+            }
+
+            _context.CompletedCourses.AddRange(courses);
             _context.SaveChanges();
 
             return new EnrollmentResponse { Message = "Enrollment has been completed" };
@@ -134,7 +144,6 @@ namespace backend.Services
             var user = _context.Enrollments.Find(userId);
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
-
         }
     }
 }

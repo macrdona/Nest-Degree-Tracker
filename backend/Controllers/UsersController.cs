@@ -7,6 +7,7 @@ using backend.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -19,18 +20,15 @@ namespace backend.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-        private readonly IHttpContextAccessor _context;
+        private readonly User _userContext;
 
-        public UsersController(
-            IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings,
-            IHttpContextAccessor context)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IHttpContextAccessor context)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
-            _context = context;
+            _userContext = (User)context.HttpContext.Items["User"];
+
         }
 
         //Ok() will return a response with a status code and formatted data
@@ -63,27 +61,36 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
 
             var user = _userService.GetById(id);
             return Ok(user);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update-account/{id}")]
         public IActionResult Update(int id, UpdateRequest model)
         {
-            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
 
             _userService.Update(id, model);
             return Ok(new { message = "User updated successfully" });
         }
 
         [HttpPost("enrollment")]
-        public IActionResult Enrollment(EnrollmentForm form)
+        public IActionResult Enrollment(EnrollmentFormRequest form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            try
+            {
+                form.UserId = _userContext.UserId; 
+            }
+            catch (Exception)
+            {
+                throw new AppException("Unauthorized Request");
             }
 
             var response = _userService.EnrollmentForm(form);
@@ -94,7 +101,7 @@ namespace backend.Controllers
         [HttpGet("enrollment/{id}")]
         public IActionResult UserEnrollment(int id)
         {
-            if (!UserAuthorization.IsUser(_context, id)) throw new AppException("Unauthorized Request");
+            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
             var response = _userService.UserEnrollment(id);
 
             return Ok(response);
