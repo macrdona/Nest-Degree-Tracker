@@ -34,7 +34,7 @@ public class CoursesController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
     {
-        var course = _courseService.GetByID(id);
+        var course = _courseService.GetCourseById(id);
         return Ok(course);
     }
 
@@ -50,5 +50,21 @@ public class CoursesController : ControllerBase
     {
         var response = _courseService.CourseRecommendations(_userContext.UserId);
         return Ok(response);
+    }
+
+    [HttpPost("add")]
+    public IActionResult AddCourse(CompletedCourses newCourse)
+    {
+        newCourse.UserId = _userContext.UserId;
+        _courseService.AddCourse(newCourse);
+        return Ok(new {Message = "Course has been added."});
+    }
+
+    [HttpPost("remove")]
+    public IActionResult RemoveCourse(CompletedCourses course)
+    {
+        course.UserId = _userContext.UserId;
+        _courseService.RemoveCourse(course);
+        return Ok(new { Message = "Course has been removed." });
     }
 }

@@ -20,7 +20,7 @@ namespace backend.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EnrollmentCompletedCourses>()
+            modelBuilder.Entity<CompletedCourses>()
                 .HasKey(k => new { k.UserId, k.CourseId });
 
             modelBuilder.Entity<MajorCourses>()
@@ -33,6 +33,6 @@ namespace backend.Models
         public DbSet<Majors> Majors { get; set; }
         public DbSet<MajorCourses> MajorCourses { get; set; }
 
-        public DbSet<EnrollmentCompletedCourses> CompletedCourses { get;set; }
+        public DbSet<CompletedCourses> CompletedCourses { get;set; }
     }
 }

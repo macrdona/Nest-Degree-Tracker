@@ -32,10 +32,10 @@ namespace backend.Entities
         public List<String>? Courses { get; set; }
     }
 
-    public class EnrollmentCompletedCourses
+    public class CompletedCourses
     {
-        public EnrollmentCompletedCourses() { }
-        public EnrollmentCompletedCourses(int userId, string course)
+        public CompletedCourses() { }
+        public CompletedCourses(int userId, string course)
         {
             UserId = userId;
             CourseId = course;

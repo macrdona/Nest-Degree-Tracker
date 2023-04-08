@@ -125,11 +125,11 @@ namespace backend.Services
             _context.Enrollments.Add(transfer_form);
             _context.SaveChanges();
 
-            List<EnrollmentCompletedCourses> courses = new List<EnrollmentCompletedCourses>(); 
+            List<CompletedCourses> courses = new List<CompletedCourses>(); 
             var userId = form.UserId;
             foreach(String course in form.Courses)
             {
-                courses.Add(new EnrollmentCompletedCourses(userId,course));
+                courses.Add(new CompletedCourses(userId,course));
             }
 
             _context.CompletedCourses.AddRange(courses);

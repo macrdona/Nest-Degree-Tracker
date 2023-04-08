@@ -67,7 +67,7 @@ namespace backend.Controllers
             return Ok(user);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update-account/{id}")]
         public IActionResult Update(int id, UpdateRequest model)
         {
             if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
