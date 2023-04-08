@@ -52,6 +52,13 @@ public class CoursesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("check-requirements")]
+    public IActionResult Requirements()
+    {
+        var response = _courseService.CheckRequirements(new RequirementsCheck(), _userContext.UserId);
+        return Ok(response);
+    }
+
     [HttpPost("add")]
     public IActionResult AddCourse(CompletedCourses newCourse)
     {

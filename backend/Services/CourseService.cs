@@ -24,6 +24,8 @@ namespace backend.Services
         void AddCourse(CompletedCourses course);
 
         void RemoveCourse(CompletedCourses course);
+
+        RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id);
     }
     public class CourseService : ICourseService
     {
@@ -119,6 +121,21 @@ namespace backend.Services
             _context.ChangeTracker.Clear();
             _context.CompletedCourses.Remove(course);
             _context.SaveChanges();
+        }
+
+        public RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id)
+        {
+            var course_query = _context.CompletedCourses.Where(x => x.UserId == id);
+            List<string> courses = new List<string>();
+            foreach(CompletedCourses course in course_query)
+            {
+                courses.Add(course.CourseId);
+            }
+
+            missing_requirements.met = new Dictionary<string, bool>();
+            UniversityRequirements.CheckRequirements(missing_requirements.met, courses);
+
+            return missing_requirements;
         }
 
     }
