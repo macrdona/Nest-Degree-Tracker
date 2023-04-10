@@ -1,0 +1,34 @@
+.row{
+  font-family: "Open Sans";
+  font-weight: 900;
+  font-size: 40px;
+  text-align: center;
+}
+.defaultButton{
+  width: 521px;
+  box-sizing: border-box;
+  background-color: #F4F4F4;
+  border: 3px solid #9C9C9C;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  margin-right: 20px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 47px;
+}
+.selectedButton{
+  background-color: #77E2FF;
+  border: 3px solid #00B2E2;
+  width: 521px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  margin-right: 20px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 47px;
+}
