@@ -28,7 +28,6 @@ namespace backend.Controllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
             _userContext = (User)context.HttpContext.Items["User"];
-
         }
 
         //Ok() will return a response with a status code and formatted data
@@ -58,25 +57,25 @@ namespace backend.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("info")]
+        public IActionResult GetById()
         {
-            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
+            if (_userContext == null) throw new AppException("Invalid token");
 
-            var user = _userService.GetById(id);
+            var user = _userService.GetById(_userContext.UserId);
             return Ok(user);
         }
 
-        [HttpPut("update-account/{id}")]
-        public IActionResult Update(int id, UpdateRequest model)
+        [HttpPut("update-account")]
+        public IActionResult Update(UpdateRequest model)
         {
-            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
+            if (_userContext == null) throw new AppException("Invalid token");
 
-            _userService.Update(id, model);
+            _userService.Update(_userContext.UserId, model);
             return Ok(new { message = "User updated successfully" });
         }
 
-        [HttpPost("enrollment")]
+        [HttpPost("enrollment-form")]
         public IActionResult Enrollment(EnrollmentFormRequest form)
         {
             if (!ModelState.IsValid)
@@ -84,25 +83,21 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                form.UserId = _userContext.UserId; 
-            }
-            catch (Exception)
-            {
-                throw new AppException("Unauthorized Request");
-            }
+            if (_userContext == null) throw new AppException("Invalid token");
 
+            form.UserId = _userContext.UserId;
+            
             var response = _userService.EnrollmentForm(form);
 
             return Ok(response);
         }
 
-        [HttpGet("enrollment/{id}")]
-        public IActionResult UserEnrollment(int id)
+        [HttpGet("enrollment-data")]
+        public IActionResult EnrollmentData()
         {
-            if (!UserAuthorization.IsUser(_userContext, id)) throw new AppException("Unauthorized Request");
-            var response = _userService.UserEnrollment(id);
+            if (_userContext == null) throw new AppException("Invalid token");
+
+            var response = _userService.UserEnrollment(_userContext.UserId);
 
             return Ok(response);
         }
