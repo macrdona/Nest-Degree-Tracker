@@ -1,9 +1,12 @@
 import sqlite3 as sq
 import pandas as pd
+import os
 import re
-connection = sq.connect(__name__ + "../../../backend/Database/test.db")
 
-df = pd.read_csv(__name__ + "/output_v3/output.csv", index_col=False)
+path, fileName = os.path.split(__file__)
+connection = sq.connect(path + "/../../../backend/Database/test.db")
+
+df = pd.read_csv(path + "/output_v3/output.csv", index_col=False)
 
 df = df.drop(["Unnamed: 0"], axis=1)
 df = df.drop(["Repeatability"], axis=1)

@@ -5,19 +5,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./SelectMajor.scss";
 import { useMajors } from "../../lib/api/useMajors";
 import { Typeahead } from "react-bootstrap-typeahead";
+import CoursesDropdown from "../forms/CoursesDropdown/CoursesDropdown";
 
 function selectMajor() {
   const [major, setMajor] = useState("");
   const [minor, setMinor] = useState("");
 
-  // const { data: majors } = useMajors();
-  let majors = [
-    //all of this is a placeholder for the real list from the database
-    { name: "Computer Science (CS)" },
-    { name: "Information Technology (IT)" },
-    { name: "Information Science (IS)" },
-    { name: "Data Science (DS)" },
-  ];
+  const { data: majors } = useMajors();
+  // let majors = [
+  //   //all of this is a placeholder for the real list from the database
+  //   { name: "Computer Science (CS)" },
+  //   { name: "Information Technology (IT)" },
+  //   { name: "Information Science (IS)" },
+  //   { name: "Data Science (DS)" },
+  // ];
 
   let minors = [
     //all of this is a placeholder for the real list from the database
@@ -77,6 +78,7 @@ function selectMajor() {
         >
           Next
         </button>
+        <CoursesDropdown />
       </div>
     </div>
   );
