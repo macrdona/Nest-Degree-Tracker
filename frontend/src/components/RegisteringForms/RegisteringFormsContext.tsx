@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Major, Minor } from "../../lib/api/types";
 import { useEnrollmentForm } from "../../lib/api/useEnrollmentForm";
 import { useAuth } from "../../lib/auth/AuthContext";
+import { useNavigate } from "react-router";
 
 export interface RegisteringFormsContextValue {
   currentStep: number;
@@ -39,6 +40,7 @@ export const RegisteringFormsContextProvider = ({
 
   const { user } = useAuth();
   const { mutate } = useEnrollmentForm();
+  const navigate = useNavigate();
 
   const submitOnboardingForm = async () => {
     if (user && major && minor)
@@ -48,6 +50,8 @@ export const RegisteringFormsContextProvider = ({
         major: major.majorName,
         minor: minor.name,
       });
+
+      navigate("/tracker");
     return true;
   };
 

@@ -1,7 +1,7 @@
 import { ErrorResponse } from "./types";
 import { useMutation } from "@tanstack/react-query";
-import Axios from "axios";
 import { toast } from "react-toastify";
+import { useAuthenticatedAxios } from "./authenticatedAxios";
 
 export interface EnrollmentFormPayload {
   userId: number;
@@ -15,6 +15,8 @@ export interface EnrollmentFormResponse {
 }
 
 export const useEnrollmentForm = () => {
+  const Axios = useAuthenticatedAxios();
+
   return useMutation<
     EnrollmentFormResponse,
     ErrorResponse,
