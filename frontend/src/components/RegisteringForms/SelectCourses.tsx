@@ -8,45 +8,18 @@ import { RegisteringFormsContext } from "./RegisteringFormsContext";
 import { Course } from "../../lib/api/useCourses";
 
 export function SelectCourses() {
-  const { currentStep, nextStep, prevStep, setCourses, courses } = useContext(
+  const { currentStep, submit, prevStep, setCourses, courses } = useContext(
     RegisteringFormsContext
   );
 
   if (currentStep !== 1) return null;
 
-  const major = "Computer Science"; //placeholder will get real major
-  const minor = "Biology"; //placeholder will get real major
-  const userMajorCourses = [];
-  const userMinorCourses = [];
-  const userGenEds = [];
+  const handleSubmit = async () => {
+    if (!courses?.length)
+      if (!confirm("No courses selected. Are you sure you want to continue?"))
+        return;
 
-  let majorCourses = [
-    //all of this is a placeholder for the real list from the database
-    { name: "Intro to Databases" },
-    { name: "Algorithms" },
-    { name: "Data Structures" },
-  ];
-  let minorCourses = [
-    //all of this is a placeholder for the real list from the database
-    { name: "Physical Therapy" },
-    { name: "Stress Management" },
-  ];
-  let genEds = [
-    //all of this is a placeholder for the real list from the database
-    { name: "Biology" },
-    { name: "Earth Science" },
-  ];
-
-  const [isActive, setActive] = useState(false);
-
-  const handleClick = () => {
-    //will change the button color
-    //need to add a handle submit for the next button
-    //handle submit will store all the button values currently selected
-    setActive((isActive) => !isActive);
-  };
-  const handleSubmit = () => {
-    //wip
+    await submit();
   };
 
   return (
@@ -84,7 +57,7 @@ export function SelectCourses() {
             className="btn btn-primary btn-lg mt-3 align-self-center text-nowrap"
             type="submit"
           >
-            Next
+            Done
           </button>
         </div>
       </div>

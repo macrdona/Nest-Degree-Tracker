@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { Course } from "../../lib/api/useCourses";
 import { toast } from "react-toastify";
 import { Major, Minor } from "../../lib/api/types";
+import { useEnrollmentForm } from "../../lib/api/useEnrollmentForm";
+import { useAuth } from "../../lib/auth/AuthContext";
 
 export interface RegisteringFormsContextValue {
   currentStep: number;
@@ -35,8 +37,17 @@ export const RegisteringFormsContextProvider = ({
   const [minor, setMinor] = useState<Minor>();
   const [courses, setCourses] = useState<Course[]>([]);
 
+  const { user } = useAuth();
+  const { mutate } = useEnrollmentForm();
+
   const submitOnboardingForm = async () => {
-    toast.info("Not implemented yet");
+    if (user && major && minor)
+      mutate({
+        courses: courses.map((course) => course.courseId),
+        userId: user.id ?? 0,
+        major: major.majorName,
+        minor: minor.name,
+      });
     return true;
   };
 
