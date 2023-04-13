@@ -7,6 +7,8 @@ import { useMajors } from "../../lib/api/useMajors";
 import { Typeahead } from "react-bootstrap-typeahead";
 import CoursesDropdown from "../forms/CoursesDropdown/CoursesDropdown";
 import { RegisteringFormsContext } from "./RegisteringFormsContext";
+import { Major, Minor } from "../../lib/api/types";
+import { Option } from "react-bootstrap-typeahead/types/types";
 
 function SelectMajor() {
   const { currentStep, nextStep, major, setMajor, minor, setMinor } =
@@ -22,7 +24,7 @@ function SelectMajor() {
   //   { name: "Data Science (DS)" },
   // ];
 
-  let minors = [
+  let minors: Minor[] = [
     //all of this is a placeholder for the real list from the database
     { name: "None" },
     { name: "Mathematics" },
@@ -30,7 +32,7 @@ function SelectMajor() {
 
   const validate = (): boolean => {
     // Passwords don't match
-    if (major === "" || minor === "") {
+    if (!major || !minor) {
       toast.error("Missing one or more required fields.");
       return false;
     }
@@ -56,9 +58,14 @@ function SelectMajor() {
           <label className="form-label fs-3">Major</label>
           <Typeahead
             options={majors ?? []}
-            labelKey={"name"}
+            onChange={(selected) => {
+              setMajor((selected[0] as Major) ?? undefined);
+            }}
+            selected={major ? ([major] as Option[]) : undefined}
+            labelKey={"majorName"}
             placeholder="Select area of study..."
             highlightOnlyResult
+            clearButton
           />
         </div>
         <div className="form-group">
@@ -66,12 +73,13 @@ function SelectMajor() {
           <Typeahead
             options={minors ?? []}
             onChange={(selected) => {
-              setMinor(selected);
+              setMinor((selected[0] as Minor) ?? undefined);
             }}
-            selected={minor}
+            selected={minor ? ([minor] as Option[]) : undefined}
             labelKey={"name"}
             placeholder="Select minor..."
             highlightOnlyResult
+            clearButton
           />
         </div>
         <button

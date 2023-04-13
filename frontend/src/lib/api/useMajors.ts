@@ -1,11 +1,7 @@
-import { ErrorResponse } from "./types";
+import { ErrorResponse, Major } from "./types";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuthenticatedAxios } from "./authenticatedAxios";
-
-export interface Major {
-  name: string;
-}
 
 export const useMajors = () => {
   const Axios = useAuthenticatedAxios();

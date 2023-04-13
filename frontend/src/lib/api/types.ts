@@ -27,7 +27,10 @@ export interface User {
 }
 
 export interface Major {
-  name: string;
+  majorId: 1;
+  majorName: string;
+  degree: string;
+  description: string;
 }
 export interface Minor {
   name: string;

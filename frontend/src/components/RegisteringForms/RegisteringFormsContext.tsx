@@ -1,14 +1,16 @@
 import React, { useContext, useState } from "react";
 import { Course } from "../../lib/api/useCourses";
 import { toast } from "react-toastify";
+import { Major, Minor } from "../../lib/api/types";
 
 export interface RegisteringFormsContextValue {
   currentStep: number;
   nextStep: () => void;
-  major?: string;
-  setMajor: (major: string) => void;
-  minor?: string;
-  setMinor: (minor: string) => void;
+  prevStep: () => void;
+  major?: Major;
+  setMajor: (major: Major) => void;
+  minor?: { name: string };
+  setMinor: (minor: Minor) => void;
   courses?: Course[];
   setCourses: (courses: Course[]) => void;
   submit: () => Promise<boolean>;
@@ -18,6 +20,7 @@ export const RegisteringFormsContext =
   React.createContext<RegisteringFormsContextValue>({
     currentStep: 0,
     nextStep: () => {},
+    prevStep: () => {},
     setCourses: () => {},
     setMajor: () => {},
     setMinor: () => {},
@@ -28,8 +31,8 @@ export const RegisteringFormsContextProvider = ({
   children,
 }: React.PropsWithChildren) => {
   const [step, setStep] = useState(0);
-  const [major, setMajor] = useState<string>();
-  const [minor, setMinor] = useState<string>();
+  const [major, setMajor] = useState<Major>();
+  const [minor, setMinor] = useState<Minor>();
   const [courses, setCourses] = useState<Course[]>([]);
 
   const submitOnboardingForm = async () => {
@@ -37,12 +40,17 @@ export const RegisteringFormsContextProvider = ({
     return true;
   };
 
+  console.log(step, major, minor, courses);
+
   return (
     <RegisteringFormsContext.Provider
       value={{
         currentStep: step,
         nextStep: () => {
           setStep((s) => s + 1);
+        },
+        prevStep: () => {
+          setStep((s) => s - 1);
         },
         major: major,
         courses: courses,
