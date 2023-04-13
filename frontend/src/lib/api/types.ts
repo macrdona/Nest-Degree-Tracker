@@ -25,3 +25,10 @@ export interface User {
   lastName: string;
   completed: boolean;
 }
+
+export interface Major {
+  name: string;
+}
+export interface Minor {
+  name: string;
+}

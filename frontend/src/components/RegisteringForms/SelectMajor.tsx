@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import Steps from "../../assets/steps-image-1.png";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,10 +6,12 @@ import "./SelectMajor.scss";
 import { useMajors } from "../../lib/api/useMajors";
 import { Typeahead } from "react-bootstrap-typeahead";
 import CoursesDropdown from "../forms/CoursesDropdown/CoursesDropdown";
+import { RegisteringFormsContext } from "./RegisteringFormsContext";
 
-function selectMajor() {
-  const [major, setMajor] = useState("");
-  const [minor, setMinor] = useState("");
+function SelectMajor() {
+  const { currentStep, nextStep, major, setMajor, minor, setMinor } =
+    useContext(RegisteringFormsContext);
+  if (currentStep !== 0) return null; // Only display if on the first step
 
   const { data: majors } = useMajors();
   // let majors = [
@@ -38,8 +40,7 @@ function selectMajor() {
 
   const handleSubmit = () => {
     if (validate()) {
-      //send information to database and continue to next page
-      //set up link for the next page
+      nextStep();
     }
   };
 
@@ -64,6 +65,10 @@ function selectMajor() {
           <label className="form-label fs-3">Minor</label>
           <Typeahead
             options={minors ?? []}
+            onChange={(selected) => {
+              setMinor(selected);
+            }}
+            selected={minor}
             labelKey={"name"}
             placeholder="Select minor..."
             highlightOnlyResult
@@ -78,10 +83,9 @@ function selectMajor() {
         >
           Next
         </button>
-        <CoursesDropdown />
       </div>
     </div>
   );
 }
 
-export default selectMajor;
+export default SelectMajor;
