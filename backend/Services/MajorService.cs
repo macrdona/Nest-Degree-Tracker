@@ -16,8 +16,9 @@ namespace backend.Services
         //IEnumerable<Course> GetByName(string majorName);
 
         //IEnumerable<Course> GetById(int id);
-        RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id);
+        IEnumerable<RequirementsCheck> CheckRequirements(int id);
     }
+
     public class MajorService : IMajorService
     {
         private readonly DataContext _context;
@@ -81,14 +82,27 @@ namespace backend.Services
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
         }*/
 
-        public RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id)
+        public IEnumerable<RequirementsCheck> CheckRequirements(int id)
         {
             var course_query = _context.CompletedCourses.Where(x => x.UserId == id).ToList();
+            if (course_query == null) throw new AppException("No courses available");
 
-            missing_requirements.met = new Dictionary<string, bool>();
-            UniversityRequirements.CheckRequirements(course_query, missing_requirements.met, _context.Courses.ToList());
+            var user = _context.Requirements.Find(id);
+            if (user == null) throw new KeyNotFoundException("User not found");
 
-            return missing_requirements;
+            var results = UniversityRequirements.CheckRequirements(course_query, _context.Courses.ToList());
+
+            foreach(var result in results )
+            {
+                switch(result.Name)
+                {
+                    case "State of Florida Requirements": if (result.Satisfied) user.StateRequirements = true; break;
+                }
+            }
+
+            _context.SaveChanges();
+
+            return results;
         }
 
     }

@@ -52,7 +52,7 @@ public class MajorsController : Controller
     public IActionResult Requirements()
     {
         if (_userContext == null) throw new AppException("Invalid token");
-        var response = _majorService.CheckRequirements(new RequirementsCheck(), _userContext.UserId);
+        var response = _majorService.CheckRequirements(_userContext.UserId);
         return Ok(response);
     }
 }

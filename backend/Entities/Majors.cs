@@ -1,6 +1,7 @@
 ﻿using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace backend.Entities
 {
@@ -13,9 +14,35 @@ namespace backend.Entities
         public string? Description { get; set; }
     }
 
+    public class Requirements
+    {
+        [Key]
+        public int UserId { get; set; }
+        public bool StateRequirements { get; set; } = false;
+        public bool UNFRequirements { get; set; } = false;
+        public bool OralRequirement { get; set; } = false;
+        public bool Prerequisites { get; set; } = false;
+        public bool CoreRequirements { get; set; } = false;
+        public bool MajorRequirements { get; set; } = false;
+        public bool MajorElectives { get; set; } = false;
+    }
+
     public class RequirementsCheck
     {
-        public Dictionary<string, bool> met { get; set; }
+        public RequirementsCheck(string name, int completedCredits, int totalCredits, bool satisfied)
+        {
+            this.Name = name;
+            this.CompletedCredits = completedCredits;
+            this.TotalCredits = totalCredits;
+            this.Satisfied = satisfied;
+        }
+
+        public string? Name { get; set; }
+        public int CompletedCredits { get; set; }
+        public int TotalCredits { get; set; }
+
+        [JsonIgnore]
+        public bool Satisfied { get; set; }
     }
 
     public static class UniversityRequirements
@@ -24,12 +51,15 @@ namespace backend.Entities
         static List<string> social = new List<string> { "AMH2020", "ANT2000", "ECO2013", "POS2041", "PSY2012", "SYG2000" };
         static List<string> math = new List<string> { "MAC1105", "MGF1106", "MGF1107", "STA2023", "STA2014", "MAC1101C", "MAC1105C", "MAC1147", "MAC1114", "MAC2233", "MAC2311" };
         static List<string> science = new List<string> { "AST2002", "BSC1005", "BSC1010C", "CHM2045", "ESC2000", "PHY1020", "CHM1020", "EVR1001" };
-        static List<string> writing = new List<string> { "CRW2000", "CRW2100", "CRW2201", "CRW2300", "CRW2400", "CRW2600", "ENC2210", "ENC2443", "ENC2451", "ENC2461", "ENC3202", "ENC3246", "ENC3250" };
         
-        public static void CheckRequirements(List<CompletedCourses> completedCourses, Dictionary<string, bool> met, List<Course> courses)
+        public static List<RequirementsCheck> CheckRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
         {
+            List<RequirementsCheck> requirements = new List<RequirementsCheck>();
+
             var results = StateRequirements(completedCourses, courses);
-            met.Add(results.Item1, results.Item2);
+            requirements.Add(results);
+
+            return requirements;
         }
 
         public static int FindCourse(CompletedCourses course, List<Course> courses, List<CompletedCourses> completedCourses)
@@ -43,7 +73,7 @@ namespace backend.Entities
             return credits;
         }
 
-        public static (string,bool) StateRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
+        public static RequirementsCheck StateRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
         {
             bool communication_complete = false;
             bool humanities_complete = false;
@@ -55,6 +85,8 @@ namespace backend.Entities
            
             foreach (CompletedCourses course in completedCourses)
             {
+                if(credits >= 15) { break; }
+
                 if (course.CourseId == "ENC1101" && !communication_complete)
                 {
                     credits += FindCourse(course, courses, completedCourses);
@@ -86,7 +118,7 @@ namespace backend.Entities
                 }
             }
 
-            return ("State of Florida Requirements", credits >= 15 ? true : false);
+            return new RequirementsCheck("State of Florida Requirements", credits, 15, credits >= 15 ? true : false);
         }
     }
 }

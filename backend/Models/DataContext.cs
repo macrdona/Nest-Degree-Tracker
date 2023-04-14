@@ -30,5 +30,6 @@ namespace backend.Models
         public DbSet<Majors> Majors { get; set; }
 
         public DbSet<CompletedCourses> CompletedCourses { get;set; }
+        public DbSet<Requirements> Requirements { get; set; }
     }
 }
