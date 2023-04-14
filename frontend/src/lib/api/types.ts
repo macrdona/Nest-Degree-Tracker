@@ -25,3 +25,13 @@ export interface User {
   lastName: string;
   completed: boolean;
 }
+
+export interface Major {
+  majorId: 1;
+  majorName: string;
+  degree: string;
+  description: string;
+}
+export interface Minor {
+  name: string;
+}

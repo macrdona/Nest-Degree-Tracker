@@ -8,6 +8,7 @@ import {
 import { User, UserToken } from "../api/types";
 import { decodeToken, isExpired } from "react-jwt";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 export interface AuthContextValue {
   user?: User;
@@ -32,7 +33,8 @@ export function AuthProvider(props: PropsWithChildren) {
   const [token, setToken] = useState<string>();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const login = (token: string) => {
+  const login = (token: string): User | undefined => {
+    console.log(token);
     const decoded: UserToken | null = decodeToken(token) as UserToken | null;
 
     const expired = isExpired(token);
@@ -48,10 +50,11 @@ export function AuthProvider(props: PropsWithChildren) {
       setUser(user);
       setToken(token);
       setLoggedIn(true);
-      console.log(user);
+      return user;
     } else {
       toast.error("Invalid token, please log in again.");
       logout();
+      return undefined;
     }
   };
 
@@ -66,7 +69,11 @@ export function AuthProvider(props: PropsWithChildren) {
     if (!loggedIn) {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
-        login(storedToken);
+        const user = login(storedToken);
+        if (user)
+          toast.info(
+            "Welcome back " + user.firstName + " " + user.lastName + "!"
+          );
       }
     }
   }, []);

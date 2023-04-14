@@ -1,7 +1,9 @@
 import sqlite3 as sq
 import pandas as pd
+import os
 
-connection = sq.connect(__name__ + "../../../backend/Database/test.db")
+path, fileName = os.path.split(__file__)
+connection = sq.connect(path + "/../../../backend/Database/test.db")
 
 majors = {
     0:{

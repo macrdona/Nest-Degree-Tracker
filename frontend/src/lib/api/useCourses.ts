@@ -1,16 +1,26 @@
-import { ErrorResponse, Major } from "./types";
+import { ErrorResponse } from "./types";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuthenticatedAxios } from "./authenticatedAxios";
 
-export const useMajors = () => {
+export interface Course {
+  availability: string;
+  coRequisites: unknown;
+  courseId: string;
+  courseName: string;
+  credits: number;
+  description: string;
+  prerequisites: string;
+}
+
+export const useCourses = () => {
   const Axios = useAuthenticatedAxios();
 
-  return useQuery<void, ErrorResponse, Major[]>(
-    ["/Majors"],
+  return useQuery<void, ErrorResponse, Course[]>(
+    ["/Courses"],
     async () => {
       const { data } = await Axios({
-        url: "/Majors",
+        url: "/Courses",
       });
       return data;
     },

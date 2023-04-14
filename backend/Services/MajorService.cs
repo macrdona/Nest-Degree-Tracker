@@ -13,7 +13,9 @@ namespace backend.Services
     {
         IEnumerable<Majors> GetAll();
 
-        IEnumerable<Course> GetMajorCourses(string majorName);
+        IEnumerable<Course> GetByName(string majorName);
+
+        IEnumerable<Course> GetById(int id);
     }
     public class MajorService : IMajorService
     {
@@ -34,7 +36,7 @@ namespace backend.Services
 
         public IEnumerable<Majors> GetAll() => _context.Majors;
 
-        public IEnumerable<Course> GetMajorCourses(string majorName)
+        public IEnumerable<Course> GetByName(string majorName)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
@@ -55,5 +57,28 @@ namespace backend.Services
 
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
         }
+
+        public IEnumerable<Course> GetById(int id)
+        {
+            //checks if major exists
+            var major = _context.Majors.FirstOrDefault(x => x.MajorId == id);
+
+            if (major == null)
+            {
+                throw new KeyNotFoundException("Major not found");
+            }
+
+            //grabs all courses from specified major
+            var majorCourses = _context.MajorCourses.Where(x => x.MajorId == major.MajorId).ToList();
+
+            List<string> courses = new List<string>();
+            foreach (MajorCourses course in majorCourses)
+            {
+                courses.Add(course.CourseId);
+            }
+
+            return _context.Courses.Where(x => courses.Contains(x.CourseId));
+        }
+
     }
 }

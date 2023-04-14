@@ -2,6 +2,9 @@ using backend.Authorization;
 using backend.Helpers;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
 using Microsoft.OpenApi.Models;
@@ -82,6 +85,15 @@ namespace backend
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IMajorService, MajorService>();
+
+            //allowing use of HTTPContext in my other services
+            services.AddScoped<IUrlHelper>(factory =>
+            {
+                var actionContext = factory.GetService<IActionContextAccessor>()
+                                           .ActionContext;
+                return new UrlHelper(actionContext);
+            });
+            services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
