@@ -9,6 +9,7 @@ import Landing from "./components/Landing/Landing";
 import SelectMajor from "./components/RegisteringForms/SelectMajor";
 import SignIn from "./components/SignIn/SignIn";
 import RegisteringForm from "./components/RegisteringForms/RegisteringForms";
+import Tracker from "./components/Tracker/Tracker";
 
 // Contains all the routes and their associated components
 export const router = createBrowserRouter([
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { path: "/onboarding", element: <RegisteringForm /> },
       { path: "/login", element: <SignIn /> },
       { path: "/register", element: <CreateAccount /> },
+      { path: "/tracker", element: <Tracker /> },
       {
         path: "*",
         element: <Navigate to="/" />, // Redirect to home

@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import Steps from "../../assets/steps-image-1.png";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./SelectMajor.scss";
 import { useMajors } from "../../lib/api/useMajors";
 import { Typeahead } from "react-bootstrap-typeahead";

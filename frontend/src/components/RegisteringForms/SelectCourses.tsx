@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import Steps2 from "../../assets/steps-image-2.png";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./SelectCourses.scss";
 import CoursesDropdown from "../forms/CoursesDropdown/CoursesDropdown";
 import { RegisteringFormsContext } from "./RegisteringFormsContext";
 import { Course } from "../../lib/api/useCourses";
 
 export function SelectCourses() {
-  const { currentStep, submit, prevStep, setCourses, courses } = useContext(
+  const { currentStep, prevStep, nextStep, setCourses, courses } = useContext(
     RegisteringFormsContext
   );
 
@@ -19,13 +18,13 @@ export function SelectCourses() {
       if (!confirm("No courses selected. Are you sure you want to continue?"))
         return;
 
-    await submit();
+    nextStep();
   };
 
   return (
     <div className="select-courses mainSection container d-flex flex-column align-items-stretch">
       <img src={Steps2} />
-      <h1 className="display-4 align-self-center">Welcome</h1>
+      <h1 className="display-4 align-self-center">Past Courses</h1>
       <p className="lead align-self-center">
         Please add the courses you've taken so far.
       </p>
@@ -57,7 +56,7 @@ export function SelectCourses() {
             className="btn btn-primary btn-lg mt-3 align-self-center text-nowrap"
             type="submit"
           >
-            Done
+            Next
           </button>
         </div>
       </div>

@@ -14,7 +14,9 @@ function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loggedIn && !user?.completed) navigate("/onboarding");
+    if (!loggedIn) return;
+    if (!user?.completed) navigate("/onboarding");
+    else navigate("/tracker");
   }, [user]);
   return (
     <div className="container-fluid bg-black text-light centered flex-fill">

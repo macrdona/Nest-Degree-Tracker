@@ -16,6 +16,8 @@ export interface RegisteringFormsContextValue {
   setMinor: (minor: Minor) => void;
   courses?: Course[];
   setCourses: (courses: Course[]) => void;
+  completedOralReq?: boolean;
+  setCompletedOralReq: (value: boolean) => void;
   submit: () => Promise<boolean>;
 }
 
@@ -27,6 +29,7 @@ export const RegisteringFormsContext =
     setCourses: () => {},
     setMajor: () => {},
     setMinor: () => {},
+    setCompletedOralReq: () => {},
     submit: async () => false,
   });
 
@@ -37,22 +40,26 @@ export const RegisteringFormsContextProvider = ({
   const [major, setMajor] = useState<Major>();
   const [minor, setMinor] = useState<Minor>();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [completedOralReq, setCompletedOralReq] = useState<boolean>(false);
 
-  const { user } = useAuth();
-  const { mutate } = useEnrollmentForm();
-  const navigate = useNavigate();
+  const { user, setOnboardingCompleted } = useAuth();
+  const { mutateAsync } = useEnrollmentForm();
 
   const submitOnboardingForm = async () => {
     if (user && major && minor)
-      mutate({
-        courses: courses.map((course) => course.courseId),
-        userId: user.id ?? 0,
-        major: major.majorName,
-        minor: minor.name,
-      });
-
-      navigate("/tracker");
-    return true;
+      try {
+        await mutateAsync({
+          courses: courses.map((course) => course.courseId),
+          userId: user.id ?? 0,
+          major: major.majorName,
+          minor: minor.name,
+        });
+        setOnboardingCompleted();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    else return false;
   };
 
   console.log(step, major, minor, courses);
@@ -67,12 +74,14 @@ export const RegisteringFormsContextProvider = ({
         prevStep: () => {
           setStep((s) => s - 1);
         },
-        major: major,
-        courses: courses,
-        minor: minor,
-        setCourses: setCourses,
-        setMajor: setMajor,
-        setMinor: setMinor,
+        major,
+        courses,
+        minor,
+        setCourses,
+        setMajor,
+        setMinor,
+        completedOralReq,
+        setCompletedOralReq,
         submit: submitOnboardingForm,
       }}
     >

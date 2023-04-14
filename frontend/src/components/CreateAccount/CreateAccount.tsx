@@ -52,7 +52,7 @@ function CreateAccount() {
         {
           onSuccess: ({ token }) => {
             login(token);
-            navigate("/"); // TODO: Should navigate to onboarding screen
+            navigate("/onboarding");
           },
         }
       );

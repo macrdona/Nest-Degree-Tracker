@@ -16,12 +16,14 @@ export interface AuthContextValue {
   login: (token: string) => void;
   logout: () => void;
   loggedIn: boolean;
+  setOnboardingCompleted: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   login: () => {},
   logout: () => {},
   loggedIn: false,
+  setOnboardingCompleted: () => {},
 });
 
 export const useAuth = () => {
@@ -44,7 +46,7 @@ export function AuthProvider(props: PropsWithChildren) {
         id: decoded.id,
         lastName: decoded.lastName,
         username: decoded.username,
-        completed: decoded?.completed === "True",
+        completed: decoded?.completed === "true",
       };
       localStorage.setItem("token", token);
       setUser(user);
@@ -56,6 +58,19 @@ export function AuthProvider(props: PropsWithChildren) {
       logout();
       return undefined;
     }
+  };
+
+  const setOnboardingCompleted = () => {
+    // Need to find another way to update our token with a newer one, but this prevents the old token from being loaded with complete=false
+    // Unfortunately this means the user has to login again after leaving/refreshing the page
+    localStorage.removeItem("token");
+    setUser((user) => {
+      if (user)
+        return {
+          ...user,
+          completed: true,
+        };
+    });
   };
 
   const logout = () => {
@@ -86,6 +101,7 @@ export function AuthProvider(props: PropsWithChildren) {
         token: token,
         login: login,
         user: user,
+        setOnboardingCompleted: setOnboardingCompleted,
       }}
     >
       {props.children}
