@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Models;
 
@@ -10,9 +11,10 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230414180534_ChangesMigration2.1")]
+    partial class ChangesMigration21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
@@ -75,6 +77,35 @@ namespace backend.Migrations.SqliteMigrations
                     b.HasKey("UserId");
 
                     b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("backend.Entities.MajorCourses", b =>
+                {
+                    b.Property<int>("MajorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CoreRequirements")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoreRequirementsCredits")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorRequirements")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorRequirementsCredits")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Prerequisites")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PrerequisitesCredits")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("MajorId");
+
+                    b.ToTable("MajorCourses");
                 });
 
             modelBuilder.Entity("backend.Entities.Majors", b =>

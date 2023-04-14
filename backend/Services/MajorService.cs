@@ -13,9 +13,10 @@ namespace backend.Services
     {
         IEnumerable<Majors> GetAll();
 
-        IEnumerable<Course> GetByName(string majorName);
+        //IEnumerable<Course> GetByName(string majorName);
 
-        IEnumerable<Course> GetById(int id);
+        //IEnumerable<Course> GetById(int id);
+        RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id);
     }
     public class MajorService : IMajorService
     {
@@ -36,7 +37,7 @@ namespace backend.Services
 
         public IEnumerable<Majors> GetAll() => _context.Majors;
 
-        public IEnumerable<Course> GetByName(string majorName)
+        /*public IEnumerable<Course> GetByName(string majorName)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
@@ -56,9 +57,9 @@ namespace backend.Services
             }
 
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
-        }
+        }*/
 
-        public IEnumerable<Course> GetById(int id)
+        /*public IEnumerable<Course> GetById(int id)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorId == id);
@@ -78,6 +79,16 @@ namespace backend.Services
             }
 
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
+        }*/
+
+        public RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id)
+        {
+            var course_query = _context.CompletedCourses.Where(x => x.UserId == id).ToList();
+
+            missing_requirements.met = new Dictionary<string, bool>();
+            UniversityRequirements.CheckRequirements(course_query, missing_requirements.met, _context.Courses.ToList());
+
+            return missing_requirements;
         }
 
     }
