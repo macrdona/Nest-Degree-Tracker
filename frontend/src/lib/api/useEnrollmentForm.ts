@@ -8,6 +8,7 @@ export interface EnrollmentFormPayload {
   major: string;
   minor: string;
   courses: string[]; // Array of Course IDs, e.g. COP3404
+  oralRequirementComplete: boolean;
 }
 
 export interface EnrollmentFormResponse {

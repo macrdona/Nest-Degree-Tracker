@@ -3,9 +3,14 @@ import Steps3 from "../../assets/steps-image-3.png";
 import { RegisteringFormsContext } from "./RegisteringFormsContext";
 
 function OtherReqs() {
-  const { currentStep, prevStep, nextStep, submit } = useContext(
-    RegisteringFormsContext
-  );
+  const {
+    currentStep,
+    prevStep,
+    nextStep,
+    submit,
+    oralRequirementComplete,
+    setOralRequirementComplete,
+  } = useContext(RegisteringFormsContext);
 
   if (currentStep !== 2) return null;
 
@@ -20,8 +25,28 @@ function OtherReqs() {
       <p className="lead align-self-center">
         Have you completed any of the special degree requirements below?
       </p>
-      <div className="form d-flex flex-column align-items-stretch">
-        [WIP]
+      <div className="form d-flex flex-column align-items-center">
+        <div className="form-check form-switch form-switch-lg">
+          <label
+            className="form-check-label fs-3"
+            htmlFor="oralPresentationReqCheck"
+          >
+            SoC Oral Presentation Requirement
+          </label>
+          <input
+            className="form-check-input"
+            id="oralPresentationReqCheck"
+            role="switch"
+            type="checkbox"
+            style={{
+              marginRight: "1em",
+            }}
+            checked={oralRequirementComplete}
+            onChange={(e) => {
+              setOralRequirementComplete(e.target.checked);
+            }}
+          />
+        </div>
         <div className="d-flex flex-row justify-content-center gap-3">
           <button
             onClick={(e) => {

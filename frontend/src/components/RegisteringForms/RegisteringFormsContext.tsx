@@ -16,8 +16,8 @@ export interface RegisteringFormsContextValue {
   setMinor: (minor: Minor) => void;
   courses?: Course[];
   setCourses: (courses: Course[]) => void;
-  completedOralReq?: boolean;
-  setCompletedOralReq: (value: boolean) => void;
+  oralRequirementComplete?: boolean;
+  setOralRequirementComplete: (value: boolean) => void;
   submit: () => Promise<boolean>;
 }
 
@@ -29,7 +29,7 @@ export const RegisteringFormsContext =
     setCourses: () => {},
     setMajor: () => {},
     setMinor: () => {},
-    setCompletedOralReq: () => {},
+    setOralRequirementComplete: () => {},
     submit: async () => false,
   });
 
@@ -40,7 +40,8 @@ export const RegisteringFormsContextProvider = ({
   const [major, setMajor] = useState<Major>();
   const [minor, setMinor] = useState<Minor>();
   const [courses, setCourses] = useState<Course[]>([]);
-  const [completedOralReq, setCompletedOralReq] = useState<boolean>(false);
+  const [oralRequirementComplete, setOralRequirementComplete] =
+    useState<boolean>(false);
 
   const { user, setOnboardingCompleted } = useAuth();
   const { mutateAsync } = useEnrollmentForm();
@@ -53,6 +54,7 @@ export const RegisteringFormsContextProvider = ({
           userId: user.id ?? 0,
           major: major.majorName,
           minor: minor.name,
+          oralRequirementComplete: oralRequirementComplete,
         });
         setOnboardingCompleted();
         return true;
@@ -80,8 +82,8 @@ export const RegisteringFormsContextProvider = ({
         setCourses,
         setMajor,
         setMinor,
-        completedOralReq,
-        setCompletedOralReq,
+        oralRequirementComplete,
+        setOralRequirementComplete,
         submit: submitOnboardingForm,
       }}
     >
