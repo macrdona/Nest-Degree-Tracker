@@ -9,6 +9,7 @@ import { User, UserToken } from "../api/types";
 import { decodeToken, isExpired } from "react-jwt";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { useLogin } from "../api";
 
 export interface AuthContextValue {
   user?: User;
@@ -16,13 +17,15 @@ export interface AuthContextValue {
   login: (token: string) => void;
   logout: () => void;
   loggedIn: boolean;
-  setOnboardingCompleted: () => void;
+  getOnboardingCompleted: () => boolean;
+  setOnboardingCompleted: (value: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   login: () => {},
   logout: () => {},
   loggedIn: false,
+  getOnboardingCompleted: () => false,
   setOnboardingCompleted: () => {},
 });
 
@@ -46,9 +49,11 @@ export function AuthProvider(props: PropsWithChildren) {
         id: decoded.id,
         lastName: decoded.lastName,
         username: decoded.username,
-        completed: decoded?.completed === "true",
+        completed: decoded.completed === "true",
       };
       localStorage.setItem("token", token);
+      if (!getOnboardingCompleted())
+        setOnboardingCompleted(decoded.completed === "true");
       setUser(user);
       setToken(token);
       setLoggedIn(true);
@@ -60,35 +65,49 @@ export function AuthProvider(props: PropsWithChildren) {
     }
   };
 
-  const setOnboardingCompleted = () => {
-    // Need to find another way to update our token with a newer one, but this prevents the old token from being loaded with complete=false
-    // Unfortunately this means the user has to login again after leaving/refreshing the page
-    localStorage.removeItem("token");
-    setUser((user) => {
-      if (user)
-        return {
-          ...user,
-          completed: true,
-        };
-    });
+  const setOnboardingCompleted = (value: boolean) => {
+    localStorage.setItem("onboarding-completed", value ? "true" : "false");
+    setUser((user) =>
+      user
+        ? {
+            ...user,
+            completed: value,
+          }
+        : undefined
+    );
+  };
+
+  const getOnboardingCompleted = () => {
+    return localStorage.getItem("onboarding-completed") === "true";
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("onboarding-completed");
     setToken(undefined);
     setUser(undefined);
     setLoggedIn(false);
   };
 
+  // Called when the user refreshes/revisits the page
+  // Since all our state is gone, we need to load from localstorage
   useEffect(() => {
     if (!loggedIn) {
+      // Get the stored token in local storage
       const storedToken = localStorage.getItem("token");
+
       if (storedToken) {
+        const storedOnboardingCompleted = localStorage.getItem(
+          "onboarding-completed"
+        );
         const user = login(storedToken);
-        if (user)
+
+        if (user) {
+          setOnboardingCompleted(storedOnboardingCompleted == "true");
           toast.info(
             "Welcome back " + user.firstName + " " + user.lastName + "!"
           );
+        }
       }
     }
   }, []);
@@ -101,6 +120,7 @@ export function AuthProvider(props: PropsWithChildren) {
         token: token,
         login: login,
         user: user,
+        getOnboardingCompleted: getOnboardingCompleted,
         setOnboardingCompleted: setOnboardingCompleted,
       }}
     >

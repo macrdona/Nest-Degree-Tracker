@@ -56,7 +56,7 @@ export const RegisteringFormsContextProvider = ({
           minor: minor.name,
           oralRequirementComplete: oralRequirementComplete,
         });
-        setOnboardingCompleted();
+        setOnboardingCompleted(true);
         return true;
       } catch (e) {
         return false;
