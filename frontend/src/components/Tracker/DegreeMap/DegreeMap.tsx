@@ -152,7 +152,10 @@ function DegreeMap(props: DegreeMapProps) {
   // end ELKJS stuff
 
   return (
-    <div className="degree-map h-100 w-100">
+    <div className="degree-map h-100 w-100 position-relative">
+      <h2 className="display-5 position-absolute p-3 px-5 opacity-50">
+        Degree Map
+      </h2>
       <ReactFlow nodes={nodesWithLayout} edges={edges} nodeTypes={nodeTypes}>
         <Background />
       </ReactFlow>

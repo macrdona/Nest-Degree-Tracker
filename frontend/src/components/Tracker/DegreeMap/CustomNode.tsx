@@ -2,9 +2,12 @@ import { Handle, Position } from "reactflow";
 import "./CustomNode.scss";
 import { Course } from "../../../lib/api/useCourses";
 import { useCompletedCourses } from "../../../lib/api/useCompletedCourses";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
+import { TrackerContext } from "./TrackerContext";
 
 function CustomNode({ data: course }: { data: Course }) {
+  const { setSelectedCourse } = useContext(TrackerContext);
+
   const { data: completedCourses } = useCompletedCourses();
   const isCompleted = useMemo(() => {
     return (
@@ -40,6 +43,10 @@ function CustomNode({ data: course }: { data: Course }) {
         className={`custom-node-body card rounded-4 ${
           isCompleted ? "completed" : ""
         } ${canBeTaken ? "canTake" : ""}`}
+        onClick={() => {
+          console.log("hello");
+          setSelectedCourse(course);
+        }}
       >
         <p className="fw-bold fs-5">{course.courseId}</p>
         <p className="">{course.courseName}</p>
