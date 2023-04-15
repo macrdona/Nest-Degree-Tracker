@@ -15,27 +15,29 @@ using Microsoft.Extensions.Options;
 public class MajorsController : Controller
 {
     private readonly IMajorService _majorService;
+    private readonly User _userContext;
 
-    public MajorsController(IMajorService majorService)
+    public MajorsController(IMajorService majorService, IHttpContextAccessor context)
     {
         _majorService = majorService;
+        _userContext = (User)context.HttpContext.Items["User"];
 
     }
 
     [HttpGet("byName/{name}")]
     public IActionResult GetByName(string name)
     {
-        var response = _majorService.GetByName(name);
+        //var response = _majorService.GetByName(name);
 
-        return Ok(response);
+        return Ok();
     }
 
     [HttpGet("byId/{id}")]
     public IActionResult GetByID(int id)
     {
-        var response = _majorService.GetById(id);
+        //var response = _majorService.GetById(id);
 
-        return Ok(response);
+        return Ok();
     }
 
     [HttpGet]
@@ -43,6 +45,14 @@ public class MajorsController : Controller
     {
         var response = _majorService.GetAll();
 
+        return Ok(response);
+    }
+
+    [HttpGet("check-requirements")]
+    public IActionResult Requirements()
+    {
+        if (_userContext == null) throw new AppException("Invalid token");
+        var response = _majorService.CheckRequirements(_userContext.UserId);
         return Ok(response);
     }
 }

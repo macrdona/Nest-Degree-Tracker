@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Models;
 
@@ -10,9 +11,10 @@ using backend.Models;
 namespace backend.Migrations.SqliteMigrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230414180534_ChangesMigration2.1")]
+    partial class ChangesMigration21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
@@ -72,12 +74,38 @@ namespace backend.Migrations.SqliteMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("OralRequirementComplete")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("backend.Entities.MajorCourses", b =>
+                {
+                    b.Property<int>("MajorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CoreRequirements")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoreRequirementsCredits")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorRequirements")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorRequirementsCredits")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Prerequisites")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PrerequisitesCredits")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("MajorId");
+
+                    b.ToTable("MajorCourses");
                 });
 
             modelBuilder.Entity("backend.Entities.Majors", b =>
@@ -98,38 +126,6 @@ namespace backend.Migrations.SqliteMigrations
                     b.HasKey("MajorId");
 
                     b.ToTable("Majors");
-                });
-
-            modelBuilder.Entity("backend.Entities.Requirements", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("CoreRequirements")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("MajorElectives")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("MajorRequirements")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("OralRequirement")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Prerequisites")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("StateRequirements")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("UNFRequirements")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("backend.Entities.User", b =>

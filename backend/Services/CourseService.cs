@@ -8,6 +8,8 @@ using AutoMapper;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Runtime.Intrinsics.X86;
+using System.Text.Json;
 
 namespace backend.Services
 {
@@ -25,7 +27,7 @@ namespace backend.Services
 
         void RemoveCourse(CompletedCourses course);
 
-        RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id);
+        IEnumerable<CoursesCompleted> CompletedCourses(int id);
     }
     public class CourseService : ICourseService
     {
@@ -123,19 +125,49 @@ namespace backend.Services
             _context.SaveChanges();
         }
 
-        public RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id)
+        public IEnumerable<CoursesCompleted> CompletedCourses(int id)
         {
             var course_query = _context.CompletedCourses.Where(x => x.UserId == id);
-            List<string> courses = new List<string>();
-            foreach(CompletedCourses course in course_query)
+
+            var course_query2 = _context.Courses
+                                        .Join(
+                                            course_query,
+                                            x => x.CourseId,
+                                            y => y.CourseId,
+                                            (x, y) => new
+                                            {
+                                                CourseId = x.CourseId,
+                                                CourseName = x.CourseName,
+                                                Credits = x.Credits,
+                                                Prerequisites = x.Prerequisites,
+                                                CoRequisites = x.CoRequisites,
+                                                Description = x.Description,
+                                                Availability = x.Availability,
+                                                Completed = true
+                                            }).ToList();
+
+            List<CoursesCompleted> completed_courses = new List<CoursesCompleted>();
+            foreach(var course in course_query2)
             {
-                courses.Add(course.CourseId);
+                var prerequisites = course.Prerequisites.Split(",");
+                if (prerequisites[0] == "N/A") { prerequisites = null; }
+
+                var corequisites = course.CoRequisites.Split(",");
+                if (corequisites[0] == "N/A") { corequisites = null; }
+
+                completed_courses.Add(new CoursesCompleted(
+                        course.CourseId,
+                        course.CourseName,
+                        course.Credits,
+                        prerequisites,
+                        corequisites,
+                        course.Description,
+                        course.Availability,
+                        course.Completed
+                    ));
             }
 
-            missing_requirements.met = new Dictionary<string, bool>();
-            UniversityRequirements.CheckRequirements(missing_requirements.met, courses);
-
-            return missing_requirements;
+            return completed_courses;
         }
 
     }

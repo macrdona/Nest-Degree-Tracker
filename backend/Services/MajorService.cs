@@ -13,10 +13,12 @@ namespace backend.Services
     {
         IEnumerable<Majors> GetAll();
 
-        IEnumerable<Course> GetByName(string majorName);
+        //IEnumerable<Course> GetByName(string majorName);
 
-        IEnumerable<Course> GetById(int id);
+        //IEnumerable<Course> GetById(int id);
+        IEnumerable<RequirementsCheck> CheckRequirements(int id);
     }
+
     public class MajorService : IMajorService
     {
         private readonly DataContext _context;
@@ -36,7 +38,7 @@ namespace backend.Services
 
         public IEnumerable<Majors> GetAll() => _context.Majors;
 
-        public IEnumerable<Course> GetByName(string majorName)
+        /*public IEnumerable<Course> GetByName(string majorName)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
@@ -56,9 +58,9 @@ namespace backend.Services
             }
 
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
-        }
+        }*/
 
-        public IEnumerable<Course> GetById(int id)
+        /*public IEnumerable<Course> GetById(int id)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorId == id);
@@ -78,6 +80,29 @@ namespace backend.Services
             }
 
             return _context.Courses.Where(x => courses.Contains(x.CourseId));
+        }*/
+
+        public IEnumerable<RequirementsCheck> CheckRequirements(int id)
+        {
+            var course_query = _context.CompletedCourses.Where(x => x.UserId == id).ToList();
+            if (course_query == null) throw new AppException("No courses available");
+
+            var user = _context.Requirements.Find(id);
+            if (user == null) throw new KeyNotFoundException("User not found");
+
+            var results = UniversityRequirements.CheckRequirements(course_query, _context.Courses.ToList());
+
+            foreach(var result in results )
+            {
+                switch(result.Name)
+                {
+                    case "State of Florida Requirements": if (result.Satisfied) user.StateRequirements = true; break;
+                }
+            }
+
+            _context.SaveChanges();
+
+            return results;
         }
 
     }

@@ -45,23 +45,29 @@ public class CoursesController : ControllerBase
         return Ok(courses);
     }
 
-    [HttpGet("recommendations")]
-    public IActionResult Recommendations()
+    [HttpGet("completed")]
+    public IActionResult CompletedCourses()
     {
-        var response = _courseService.CourseRecommendations(_userContext.UserId);
+        if (_userContext == null) throw new AppException("Invalid token");
+
+        var response = _courseService.CompletedCourses(_userContext.UserId);
+
         return Ok(response);
     }
 
-    [HttpGet("check-requirements")]
-    public IActionResult Requirements()
+    [HttpGet("recommendations")]
+    public IActionResult Recommendations()
     {
-        var response = _courseService.CheckRequirements(new RequirementsCheck(), _userContext.UserId);
+        if (_userContext == null) throw new AppException("Invalid token");
+        var response = _courseService.CourseRecommendations(_userContext.UserId);
         return Ok(response);
     }
 
     [HttpPost("add")]
     public IActionResult AddCourse(CompletedCourses newCourse)
     {
+        if (_userContext == null) throw new AppException("Invalid token");
+
         newCourse.UserId = _userContext.UserId;
         _courseService.AddCourse(newCourse);
         return Ok(new {Message = "Course has been added."});
@@ -70,6 +76,8 @@ public class CoursesController : ControllerBase
     [HttpPost("remove")]
     public IActionResult RemoveCourse(CompletedCourses course)
     {
+        if (_userContext == null) throw new AppException("Invalid token");
+
         course.UserId = _userContext.UserId;
         _courseService.RemoveCourse(course);
         return Ok(new { Message = "Course has been removed." });

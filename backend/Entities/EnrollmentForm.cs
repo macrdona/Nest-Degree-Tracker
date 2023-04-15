@@ -16,6 +16,9 @@ namespace backend.Entities
         [Required]
         public string? Minor { get; set;}
 
+        [Required]
+        public bool OralRequirementComplete { get; set; }
+
     }
 
     public class EnrollmentFormRequest
@@ -30,6 +33,9 @@ namespace backend.Entities
 
         [Required]
         public List<String>? Courses { get; set; }
+
+        [Required]
+        public bool OralRequirementComplete { get; set; }
     }
 
     public class CompletedCourses
