@@ -5,7 +5,7 @@ import { useAuthenticatedAxios } from "./authenticatedAxios";
 
 export interface Course {
   availability: string;
-  coRequisites: unknown;
+  coRequisites: string[];
   courseId: string;
   courseName: string;
   credits: number;

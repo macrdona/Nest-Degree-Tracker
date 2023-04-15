@@ -1,9 +1,10 @@
+import DegreeMap from "./DegreeMap/DegreeMap";
 import "./Tracker.scss";
 
 interface TrackerProps {}
 
 function Tracker(props: TrackerProps) {
-  return <div>This is the Tracker component!</div>;
+  return <DegreeMap />;
 }
 
 export default Tracker;

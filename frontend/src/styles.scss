@@ -31,7 +31,6 @@ $btn-font-weight: 700;
 @import "../node_modules/react-bootstrap-typeahead/css/Typeahead.bs5.scss";
 
 /** https://codepen.io/nisharg/pen/gOPLOYY **/
-
 @mixin switch($res: "sm") {
   $index: 1rem;
   $mainVal: 1rem;
@@ -47,7 +46,7 @@ $btn-font-weight: 700;
     $mainVal: 2.5rem;
   }
 
-  margin-bottom: $index / 2; /* JUST FOR STYLING PURPOSE */
+  margin-bottom: calc($index / 2); /* JUST FOR STYLING PURPOSE */
 
   .form-check-input {
     height: $mainVal;
@@ -77,4 +76,8 @@ $btn-font-weight: 700;
 
 .form-switch.form-switch-xl {
   @include switch("xl");
+}
+
+.react-flow__attribution {
+  // display: none !important;
 }

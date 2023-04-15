@@ -1,0 +1,17 @@
+.custom-node-body {
+  width: 200px;
+  height: 200px;
+  background-color: rgb(196, 255, 190) !important;
+  padding: 1em;
+
+  &:hover,
+  &:active {
+    border-color: rgba(0, 0, 0, 0.795);
+
+    background-color: rgb(158, 255, 147) !important;
+  }
+
+  p {
+    margin: 0;
+  }
+}
