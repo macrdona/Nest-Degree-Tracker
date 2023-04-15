@@ -19,18 +19,29 @@ public class MajorsController : Controller
     public MajorsController(IMajorService majorService)
     {
         _majorService = majorService;
-   
+
+    }
+
+    [HttpGet("byName/{name}")]
+    public IActionResult GetByName(string name)
+    {
+        var response = _majorService.GetByName(name);
+
+        return Ok(response);
+    }
+
+    [HttpGet("byId/{id}")]
+    public IActionResult GetByID(int id)
+    {
+        var response = _majorService.GetById(id);
+
+        return Ok(response);
     }
 
     [HttpGet]
-    public IActionResult GetMajor(MajorSelectionRequest model)
+    public IActionResult GetMajors()
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var response = _majorService.GetMajorCourses(model.MajorName);
+        var response = _majorService.GetAll();
 
         return Ok(response);
     }

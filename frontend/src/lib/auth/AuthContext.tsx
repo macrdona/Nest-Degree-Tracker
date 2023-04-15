@@ -5,9 +5,10 @@ import {
   useEffect,
   useState,
 } from "react";
-import { User } from "../api/types";
+import { User, UserToken } from "../api/types";
 import { decodeToken, isExpired } from "react-jwt";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 export interface AuthContextValue {
   user?: User;
@@ -15,12 +16,14 @@ export interface AuthContextValue {
   login: (token: string) => void;
   logout: () => void;
   loggedIn: boolean;
+  setOnboardingCompleted: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   login: () => {},
   logout: () => {},
   loggedIn: false,
+  setOnboardingCompleted: () => {},
 });
 
 export const useAuth = () => {
@@ -32,19 +35,42 @@ export function AuthProvider(props: PropsWithChildren) {
   const [token, setToken] = useState<string>();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const login = (token: string) => {
-    const decoded: User | null = decodeToken(token) as User | null;
+  const login = (token: string): User | undefined => {
+    console.log(token);
+    const decoded: UserToken | null = decodeToken(token) as UserToken | null;
+
     const expired = isExpired(token);
     if (decoded && !expired) {
-      setUser(decoded);
+      const user: User = {
+        firstName: decoded.firstName,
+        id: decoded.id,
+        lastName: decoded.lastName,
+        username: decoded.username,
+        completed: decoded?.completed === "true",
+      };
+      localStorage.setItem("token", token);
+      setUser(user);
       setToken(token);
       setLoggedIn(true);
-      console.log(decoded);
-      toast.success("Logged in.");
+      return user;
     } else {
       toast.error("Invalid token, please log in again.");
       logout();
+      return undefined;
     }
+  };
+
+  const setOnboardingCompleted = () => {
+    // Need to find another way to update our token with a newer one, but this prevents the old token from being loaded with complete=false
+    // Unfortunately this means the user has to login again after leaving/refreshing the page
+    localStorage.removeItem("token");
+    setUser((user) => {
+      if (user)
+        return {
+          ...user,
+          completed: true,
+        };
+    });
   };
 
   const logout = () => {
@@ -58,7 +84,11 @@ export function AuthProvider(props: PropsWithChildren) {
     if (!loggedIn) {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
-        login(storedToken);
+        const user = login(storedToken);
+        if (user)
+          toast.info(
+            "Welcome back " + user.firstName + " " + user.lastName + "!"
+          );
       }
     }
   }, []);
@@ -71,6 +101,7 @@ export function AuthProvider(props: PropsWithChildren) {
         token: token,
         login: login,
         user: user,
+        setOnboardingCompleted: setOnboardingCompleted,
       }}
     >
       {props.children}

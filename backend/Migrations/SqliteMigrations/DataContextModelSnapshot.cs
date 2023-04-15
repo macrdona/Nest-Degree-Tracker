@@ -45,15 +45,24 @@ namespace backend.Migrations.SqliteMigrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("backend.Entities.EnrollmentCompletedCourses", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "CourseId");
+
+                    b.ToTable("CompletedCourses");
+                });
+
             modelBuilder.Entity("backend.Entities.EnrollmentForm", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Courses")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Major")
                         .IsRequired()
@@ -70,11 +79,13 @@ namespace backend.Migrations.SqliteMigrations
 
             modelBuilder.Entity("backend.Entities.MajorCourses", b =>
                 {
+                    b.Property<int>("MajorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CourseId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MajorId")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("MajorId", "CourseId");
 
                     b.ToTable("MajorCourses");
                 });

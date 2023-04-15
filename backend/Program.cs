@@ -2,9 +2,12 @@ using backend.Authorization;
 using backend.Helpers;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
-
+using Microsoft.OpenApi.Models;
 namespace backend
 {
     public class Program
@@ -37,7 +40,34 @@ namespace backend
 
             //allow use of swagger for API testing
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+                {
+
+                    // Enables JWT authentication on swagger so we can test out the endpoints more easily
+                    // This will display an "Authorize" button, click it and enter in a valid JWT token
+                    options.AddSecurityDefinition("Bearer",
+                        new OpenApiSecurityScheme
+                        {
+                            Description = "JWT Authorization",
+                            In = ParameterLocation.Header,
+                            Name = "Authorization",
+                            Type = SecuritySchemeType.ApiKey
+                        }
+                    );
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                        },
+                        new string[] { }
+                        }
+                    });
+                });
 
             // configure automapper with all automapper profiles from this assembly
             services.AddAutoMapper(typeof(Program));
@@ -56,6 +86,15 @@ namespace backend
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IMajorService, MajorService>();
 
+            //allowing use of HTTPContext in my other services
+            services.AddScoped<IUrlHelper>(factory =>
+            {
+                var actionContext = factory.GetService<IActionContextAccessor>()
+                                           .ActionContext;
+                return new UrlHelper(actionContext);
+            });
+            services.AddHttpContextAccessor();
+
             var app = builder.Build();
 
             // migrate any database changes on startup (includes initial db creation)
@@ -65,7 +104,7 @@ namespace backend
                 dataContext.Database.Migrate();
             }
 
-            if(app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
