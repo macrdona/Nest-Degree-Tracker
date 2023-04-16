@@ -34,24 +34,16 @@ public class CoursesController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
     {
-        var course = _courseService.GetCourseById(id);
-        return Ok(course);
+        var response = _courseService.GetCourseById(id);
+        return Ok(response);
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var courses = _courseService.GetAll();
-        return Ok(courses);
-    }
-
-    [HttpGet("completed")]
-    public IActionResult CompletedCourses()
-    {
         if (_userContext == null) throw new AppException("Invalid token");
 
-        var response = _courseService.CompletedCourses(_userContext.UserId);
-
+        var response = _courseService.GetAll(_userContext.UserId);
         return Ok(response);
     }
 

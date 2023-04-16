@@ -16,20 +16,7 @@ namespace backend.Entities
 
     public class Requirements
     {
-        [Key]
-        public int UserId { get; set; }
-        public bool StateRequirements { get; set; } = false;
-        public bool UNFRequirements { get; set; } = false;
-        public bool OralRequirement { get; set; } = false;
-        public bool Prerequisites { get; set; } = false;
-        public bool CoreRequirements { get; set; } = false;
-        public bool MajorRequirements { get; set; } = false;
-        public bool MajorElectives { get; set; } = false;
-    }
-
-    public class RequirementsCheck
-    {
-        public RequirementsCheck(string name, int completedCredits, int totalCredits, bool satisfied)
+        public Requirements(string name, int completedCredits, int totalCredits, bool satisfied)
         {
             this.Name = name;
             this.CompletedCredits = completedCredits;
@@ -40,8 +27,6 @@ namespace backend.Entities
         public string? Name { get; set; }
         public int CompletedCredits { get; set; }
         public int TotalCredits { get; set; }
-
-        [JsonIgnore]
         public bool Satisfied { get; set; }
     }
 
@@ -52,12 +37,20 @@ namespace backend.Entities
         static List<string> math = new List<string> { "MAC1105", "MGF1106", "MGF1107", "STA2023", "STA2014", "MAC1101C", "MAC1105C", "MAC1147", "MAC1114", "MAC2233", "MAC2311" };
         static List<string> science = new List<string> { "AST2002", "BSC1005", "BSC1010C", "CHM2045", "ESC2000", "PHY1020", "CHM1020", "EVR1001" };
         
-        public static List<RequirementsCheck> CheckRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
+        public static List<Requirements> CheckRequirements(List<CompletedCourses> completedCourses, List<Course> courses, int majorId)
         {
-            List<RequirementsCheck> requirements = new List<RequirementsCheck>();
+            List<Requirements> requirements = new List<Requirements>();
 
             var results = StateRequirements(completedCourses, courses);
             requirements.Add(results);
+
+            requirements.Add(new Requirements("UNF General Education Requirements", 0, 21, false));
+
+            var major_results = Majors(completedCourses, courses, majorId);
+            foreach(var result in major_results)
+            {
+                requirements.Add(result);
+            }
 
             return requirements;
         }
@@ -73,7 +66,7 @@ namespace backend.Entities
             return credits;
         }
 
-        public static RequirementsCheck StateRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
+        public static Requirements StateRequirements(List<CompletedCourses> completedCourses, List<Course> courses)
         {
             bool communication_complete = false;
             bool humanities_complete = false;
@@ -118,7 +111,30 @@ namespace backend.Entities
                 }
             }
 
-            return new RequirementsCheck("State of Florida Requirements", credits, 15, credits >= 15 ? true : false);
+            var satisfied = false;
+            if(credits >= 15)
+            {
+                credits = 15;
+                satisfied = true;
+            }
+
+            return new Requirements("State of Florida Requirements", credits, 15, satisfied);
+        }
+
+        public static List<Requirements> Majors(List<CompletedCourses> completedCourses, List<Course> courses, int majorId)
+        {
+            List<Requirements> result = null;
+
+            switch(majorId)
+            {
+                case 1: result = ComputerScience.CheckAll(completedCourses,courses); break;
+                case 2: result = ComputerScience.CheckAll(completedCourses, courses); break;
+                case 3: result = ComputerScience.CheckAll(completedCourses, courses); break;
+                case 4: result = ComputerScience.CheckAll(completedCourses, courses); break;
+                case 5: result = ComputerScience.CheckAll(completedCourses, courses); break;
+            }
+
+            return result;
         }
     }
 }

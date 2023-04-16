@@ -41,15 +41,17 @@ namespace backend.Entities
     public class CompletedCourses
     {
         public CompletedCourses() { }
-        public CompletedCourses(int userId, string course)
+        public CompletedCourses(int userId, string course, bool completed=true)
         {
             UserId = userId;
             CourseId = course;
+            Completed = completed;
         }
 
         public int UserId { get; set; }
 
         public string? CourseId { get; set; }
+        public bool Completed { get; set; }
     }
 
     public class EnrollmentResponse
