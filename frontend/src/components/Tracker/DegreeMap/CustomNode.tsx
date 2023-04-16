@@ -1,28 +1,25 @@
 import { Handle, Position } from "reactflow";
 import "./CustomNode.scss";
-import { Course } from "../../../lib/api/useCourses";
-import { useCompletedCourses } from "../../../lib/api/useCompletedCourses";
+import { Course, useCourses } from "../../../lib/api/useCourses";
 import { useContext, useMemo } from "react";
 import { TrackerContext } from "./TrackerContext";
 
 function CustomNode({ data: course }: { data: Course }) {
   const { setSelectedCourse } = useContext(TrackerContext);
 
-  const { data: completedCourses } = useCompletedCourses();
-  const isCompleted = useMemo(() => {
-    return (
-      completedCourses?.find((c) => c.courseId === course.courseId)
-        ?.completed ?? false
-    );
-  }, [completedCourses]);
+  const { data: courses } = useCourses();
+
+  const completedCourses = useMemo(() => {
+    return courses?.filter((c) => c.completed) ?? [];
+  }, [courses]);
 
   const canBeTaken = useMemo(() => {
     if (!course) return false;
-    if (isCompleted) return false;
+    if (course.completed) return false;
     if (!completedCourses) return false;
-    if (course.prerequisites == "N/A") return true;
+    if (!course.prerequisites?.length) return true;
 
-    const prereqs = course.prerequisites.split(",");
+    const prereqs = course.prerequisites;
 
     if (
       prereqs.every(
@@ -41,7 +38,7 @@ function CustomNode({ data: course }: { data: Course }) {
       <Handle type="target" position={Position.Top} />
       <div
         className={`custom-node-body card rounded-4 ${
-          isCompleted ? "completed" : ""
+          course.completed ? "completed" : ""
         } ${canBeTaken ? "canTake" : ""}`}
         onClick={() => {
           console.log("hello");
@@ -51,7 +48,7 @@ function CustomNode({ data: course }: { data: Course }) {
         <p className="fw-bold fs-5">{course.courseId}</p>
         <p className="">{course.courseName}</p>
         <p className="">({course.credits} credits)</p>
-        {isCompleted ? <em>Completed</em> : null}
+        {course.completed ? <em>Completed</em> : null}
       </div>
       <Handle type="source" position={Position.Bottom} />
     </>

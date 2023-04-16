@@ -85,8 +85,8 @@ function DegreeMap(props: DegreeMapProps) {
     if (!courses) return [];
     const e: Edge[] = [];
     for (const course of courses) {
-      if (course.prerequisites == "N/A") continue;
-      const prereqs = course.prerequisites.split(",");
+      if (!course.prerequisites?.length) continue;
+      const prereqs = course.prerequisites;
       for (const prereq of prereqs) {
         if (courses.some((c) => c.courseId === prereq))
           e.push({

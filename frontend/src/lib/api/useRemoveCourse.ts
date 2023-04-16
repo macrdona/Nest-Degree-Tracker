@@ -24,7 +24,7 @@ export const useRemoveCourse = () => {
     {
       onSuccess: (data) => {
         toast.success("Course removed.");
-        queryClient.refetchQueries(["/Courses/completed"]);
+        queryClient.refetchQueries(["/Courses"]);
       },
       onError: ({ response }) => {
         toast.error(response?.data?.message ?? "Unknown Error.");

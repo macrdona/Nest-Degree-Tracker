@@ -7,7 +7,7 @@ import { Course } from "./useCourses";
 interface CourseWithCompletion extends Course {
   completed: boolean;
 }
-
+/** @deprecated: useCourses() now includes a completed flag */
 export const useCompletedCourses = () => {
   const Axios = useAuthenticatedAxios();
 
