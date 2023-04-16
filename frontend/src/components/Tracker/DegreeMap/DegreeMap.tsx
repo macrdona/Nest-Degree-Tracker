@@ -21,7 +21,6 @@ function DegreeMap(props: DegreeMapProps) {
     "MAC2312",
     "PHY2049",
     "PHY2048C",
-    "PHY2049",
     "COT3100",
     "COP3503",
     "COP3530",

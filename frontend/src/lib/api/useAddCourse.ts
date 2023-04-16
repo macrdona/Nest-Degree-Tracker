@@ -25,6 +25,7 @@ export const useAddCourse = () => {
       onSuccess: (data) => {
         toast.success("Course added.");
         queryClient.refetchQueries(["/Courses"]);
+        queryClient.refetchQueries(["/Majors/check-requirements"]);
       },
       onError: ({ response }) => {
         toast.error(response?.data?.message ?? "Unknown Error.");
