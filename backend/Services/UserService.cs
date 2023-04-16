@@ -118,7 +118,7 @@ namespace backend.Services
 
             if (user == null) throw new KeyNotFoundException();
 
-            if ((bool)user.Completed) throw new AppException("User has already completed the form");
+            if ((bool)user.EnrollmentCompleted) throw new AppException("User has already completed the form");
 
             //add enrollemt form info
             var transfer_form = _mapper.Map<EnrollmentForm>(form);
@@ -133,14 +133,8 @@ namespace backend.Services
             }
             _context.CompletedCourses.AddRange(courses);
 
-            //update requirements based on given information
-            var requirements_form = new Requirements();
-            requirements_form.UserId = userId;
-            requirements_form.OralRequirement = true;
-            _context.Requirements.Add(requirements_form);
-
             //update users record to denote that form has been completed
-            user.Completed = true;
+            user.EnrollmentCompleted = true;
             _context.SaveChanges();
 
             return new EnrollmentResponse { Message = "Enrollment has been completed" };

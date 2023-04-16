@@ -24,6 +24,14 @@ public class MajorsController : Controller
 
     }
 
+    [HttpGet]
+    public IActionResult GetMajors()
+    {
+        var response = _majorService.GetAll();
+
+        return Ok(response);
+    }
+
     [HttpGet("byName/{name}")]
     public IActionResult GetByName(string name)
     {
@@ -38,14 +46,6 @@ public class MajorsController : Controller
         //var response = _majorService.GetById(id);
 
         return Ok();
-    }
-
-    [HttpGet]
-    public IActionResult GetMajors()
-    {
-        var response = _majorService.GetAll();
-
-        return Ok(response);
     }
 
     [HttpGet("check-requirements")]

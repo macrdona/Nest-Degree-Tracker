@@ -11,7 +11,7 @@ namespace backend.Entities
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
-        public bool Completed { get; set; } = false;
+        public bool EnrollmentCompleted { get; set; } = false;
 
         [JsonIgnore]
         public string? PasswordHash { get; set; }

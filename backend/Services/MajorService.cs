@@ -13,10 +13,10 @@ namespace backend.Services
     {
         IEnumerable<Majors> GetAll();
 
-        //IEnumerable<Course> GetByName(string majorName);
+        Majors GetByName(string majorName);
 
-        //IEnumerable<Course> GetById(int id);
-        IEnumerable<RequirementsCheck> CheckRequirements(int id);
+        Majors GetById(int id);
+        IEnumerable<Requirements> CheckRequirements(int id);
     }
 
     public class MajorService : IMajorService
@@ -38,7 +38,7 @@ namespace backend.Services
 
         public IEnumerable<Majors> GetAll() => _context.Majors;
 
-        /*public IEnumerable<Course> GetByName(string majorName)
+        public Majors GetByName(string majorName)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
@@ -48,19 +48,10 @@ namespace backend.Services
                 throw new KeyNotFoundException("Major not found");
             }
 
-            //grabs all courses from specified major
-            var majorCourses = _context.MajorCourses.Where(x => x.MajorId == major.MajorId).ToList();
-            
-            List<string> courses = new List<string>();
-            foreach(MajorCourses course in majorCourses)
-            {
-                courses.Add(course.CourseId);
-            }
+            return major;
+        }
 
-            return _context.Courses.Where(x => courses.Contains(x.CourseId));
-        }*/
-
-        /*public IEnumerable<Course> GetById(int id)
+        public Majors GetById(int id)
         {
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorId == id);
@@ -70,37 +61,20 @@ namespace backend.Services
                 throw new KeyNotFoundException("Major not found");
             }
 
-            //grabs all courses from specified major
-            var majorCourses = _context.MajorCourses.Where(x => x.MajorId == major.MajorId).ToList();
 
-            List<string> courses = new List<string>();
-            foreach (MajorCourses course in majorCourses)
-            {
-                courses.Add(course.CourseId);
-            }
+            return major;
+        }
 
-            return _context.Courses.Where(x => courses.Contains(x.CourseId));
-        }*/
-
-        public IEnumerable<RequirementsCheck> CheckRequirements(int id)
+        public IEnumerable<Requirements> CheckRequirements(int id)
         {
             var course_query = _context.CompletedCourses.Where(x => x.UserId == id).ToList();
             if (course_query == null) throw new AppException("No courses available");
 
-            var user = _context.Requirements.Find(id);
-            if (user == null) throw new KeyNotFoundException("User not found");
+            var enrollment_query = _context.Enrollments.FirstOrDefault(x => x.UserId == id);
 
-            var results = UniversityRequirements.CheckRequirements(course_query, _context.Courses.ToList());
+            var major_query = _context.Majors.FirstOrDefault(x => x.MajorName == enrollment_query.Major);
 
-            foreach(var result in results )
-            {
-                switch(result.Name)
-                {
-                    case "State of Florida Requirements": if (result.Satisfied) user.StateRequirements = true; break;
-                }
-            }
-
-            _context.SaveChanges();
+            var results = UniversityRequirements.CheckRequirements(course_query, _context.Courses.ToList(), major_query.MajorId);
 
             return results;
         }

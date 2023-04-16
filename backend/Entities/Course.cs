@@ -23,9 +23,9 @@ namespace backend.Entities
         public string? Availability { get; set; }
     }
 
-    public class CoursesCompleted
+    public class CoursesRequest
     {
-        public CoursesCompleted(string? courseId, string? courseName, int? credits, string[]? prerequisites, string[]? coRequisites, string? description, string? availability, bool completed)
+        public CoursesRequest(string? courseId, string? courseName, int? credits, string[]? prerequisites, string[]? coRequisites, string? description, string? availability, bool completed)
         {
             CourseId = courseId;
             CourseName = courseName;
