@@ -14,7 +14,7 @@ namespace backend.Entities
     {
         public string? CourseId { get; set; }
         public string? CourseName { get; set; }
-        public int? Credits { get; set; }
+        public int Credits { get; set; }
 
         public string? Prerequisites { get; set; }
 
@@ -25,7 +25,7 @@ namespace backend.Entities
 
     public class CoursesRequest
     {
-        public CoursesRequest(string? courseId, string? courseName, int? credits, string[]? prerequisites, string[]? coRequisites, string? description, string? availability, bool completed)
+        public CoursesRequest(string? courseId, string? courseName, int credits, string[]? prerequisites, string[]? coRequisites, string? description, string? availability, bool completed)
         {
             CourseId = courseId;
             CourseName = courseName;
@@ -39,7 +39,7 @@ namespace backend.Entities
 
         public string? CourseId { get; set; }
         public string? CourseName { get; set; }
-        public int? Credits { get; set; }
+        public int Credits { get; set; }
 
         public string[]? Prerequisites { get; set; }
 

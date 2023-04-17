@@ -58,6 +58,11 @@ public class CoursesController : ControllerBase
     [HttpPost("add")]
     public IActionResult AddCourse(CompletedCourses newCourse)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         if (_userContext == null) throw new AppException("Invalid token");
 
         newCourse.UserId = _userContext.UserId;
@@ -68,6 +73,11 @@ public class CoursesController : ControllerBase
     [HttpPost("remove")]
     public IActionResult RemoveCourse(CompletedCourses course)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         if (_userContext == null) throw new AppException("Invalid token");
 
         course.UserId = _userContext.UserId;
