@@ -8,6 +8,8 @@ using AutoMapper;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Runtime.Intrinsics.X86;
+using System.Text.Json;
 
 namespace backend.Services
 {
@@ -17,15 +19,13 @@ namespace backend.Services
 
         Course GetCourseByName(string name);
         
-        IEnumerable<Course> GetAll();
+        IEnumerable<CoursesRequest> GetAll(int id);
 
         IEnumerable<Course> CourseRecommendations(int id);
 
         void AddCourse(CompletedCourses course);
 
         void RemoveCourse(CompletedCourses course);
-
-        RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id);
     }
     public class CourseService : ICourseService
     {
@@ -44,7 +44,54 @@ namespace backend.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<Course> GetAll() => _context.Courses;
+        public IEnumerable<CoursesRequest> GetAll(int id)
+        {
+            var completed_courses = _context.CompletedCourses.Where(x => x.UserId == id);
+
+            //left join between Courses and CompletedCourses
+            var course_query2 = _context.Courses
+                                .GroupJoin(
+                                    completed_courses,
+                                    all => all.CourseId,
+                                    completed => completed.CourseId,
+                                    (all_courses, completed) => new { all_courses, completed })
+                                        .SelectMany(
+                                            x => x.completed.DefaultIfEmpty(),
+                                            (_all, _comp) => new
+                                            {
+                                                CourseId = _all.all_courses.CourseId,
+                                                CourseName = _all.all_courses.CourseName,
+                                                Credits = _all.all_courses.Credits,
+                                                Prerequisites = _all.all_courses.Prerequisites,
+                                                CoRequisites = _all.all_courses.CoRequisites,
+                                                Description = _all.all_courses.Description,
+                                                Availability = _all.all_courses.Availability,
+                                                Completed = (_comp == null) ? false : true
+                                            }).ToList();
+
+            List<CoursesRequest> course_list = new List<CoursesRequest>();
+            foreach (var course in course_query2)
+            {
+                var prerequisites = course.Prerequisites.Split(",");
+                if (prerequisites[0] == "N/A") { prerequisites = null; }
+
+                var corequisites = course.CoRequisites.Split(",");
+                if (corequisites[0] == "N/A") { corequisites = null; }
+
+                course_list.Add(new CoursesRequest(
+                        course.CourseId,
+                        course.CourseName,
+                        course.Credits,
+                        prerequisites,
+                        corequisites,
+                        course.Description,
+                        course.Availability,
+                        course.Completed
+                    ));
+            }
+
+            return course_list;
+        }
 
         public Course GetCourseById(string id)
         {
@@ -122,21 +169,5 @@ namespace backend.Services
             _context.CompletedCourses.Remove(course);
             _context.SaveChanges();
         }
-
-        public RequirementsCheck CheckRequirements(RequirementsCheck missing_requirements, int id)
-        {
-            var course_query = _context.CompletedCourses.Where(x => x.UserId == id);
-            List<string> courses = new List<string>();
-            foreach(CompletedCourses course in course_query)
-            {
-                courses.Add(course.CourseId);
-            }
-
-            missing_requirements.met = new Dictionary<string, bool>();
-            UniversityRequirements.CheckRequirements(missing_requirements.met, courses);
-
-            return missing_requirements;
-        }
-
     }
 }

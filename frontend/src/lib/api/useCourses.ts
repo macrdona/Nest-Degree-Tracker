@@ -5,12 +5,13 @@ import { useAuthenticatedAxios } from "./authenticatedAxios";
 
 export interface Course {
   availability: string;
-  coRequisites: unknown;
+  coRequisites: string[] | null;
   courseId: string;
   courseName: string;
   credits: number;
   description: string;
-  prerequisites: string;
+  prerequisites: string[] | null;
+  completed: boolean;
 }
 
 export const useCourses = () => {

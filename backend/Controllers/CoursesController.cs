@@ -34,34 +34,37 @@ public class CoursesController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
     {
-        var course = _courseService.GetCourseById(id);
-        return Ok(course);
+        var response = _courseService.GetCourseById(id);
+        return Ok(response);
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var courses = _courseService.GetAll();
-        return Ok(courses);
+        if (_userContext == null) throw new AppException("Invalid token");
+
+        var response = _courseService.GetAll(_userContext.UserId);
+        return Ok(response);
     }
 
     [HttpGet("recommendations")]
     public IActionResult Recommendations()
     {
+        if (_userContext == null) throw new AppException("Invalid token");
         var response = _courseService.CourseRecommendations(_userContext.UserId);
-        return Ok(response);
-    }
-
-    [HttpGet("check-requirements")]
-    public IActionResult Requirements()
-    {
-        var response = _courseService.CheckRequirements(new RequirementsCheck(), _userContext.UserId);
         return Ok(response);
     }
 
     [HttpPost("add")]
     public IActionResult AddCourse(CompletedCourses newCourse)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (_userContext == null) throw new AppException("Invalid token");
+
         newCourse.UserId = _userContext.UserId;
         _courseService.AddCourse(newCourse);
         return Ok(new {Message = "Course has been added."});
@@ -70,6 +73,13 @@ public class CoursesController : ControllerBase
     [HttpPost("remove")]
     public IActionResult RemoveCourse(CompletedCourses course)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (_userContext == null) throw new AppException("Invalid token");
+
         course.UserId = _userContext.UserId;
         _courseService.RemoveCourse(course);
         return Ok(new { Message = "Course has been removed." });

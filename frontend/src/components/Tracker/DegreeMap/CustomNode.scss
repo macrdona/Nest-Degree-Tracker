@@ -1,0 +1,31 @@
+.custom-node-body {
+  width: 200px;
+  height: 200px;
+  background-color: rgb(241, 241, 241) !important;
+  padding: 1em;
+
+  opacity: 0.4;
+  &:hover,
+  &:active {
+    opacity: 1;
+    border-color: rgba(0, 0, 0, 0.795);
+
+    background-color: rgb(228, 228, 228) !important;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &.completed {
+    opacity: 1;
+    background-color: rgb(209, 255, 209) !important;
+    &:active {
+      background-color: rgb(166, 255, 181) !important;
+    }
+  }
+
+  &.canTake {
+    opacity: 1;
+  }
+}

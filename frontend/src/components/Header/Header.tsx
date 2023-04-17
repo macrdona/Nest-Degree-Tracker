@@ -15,12 +15,15 @@ function Header() {
   };
 
   return (
-    <div className="py-0 navbar navbar-dark bg-dark justify-content-center">
+    <div className="py-0 px-3 navbar navbar-dark bg-dark justify-content-space-between">
       <Link to="/" className="navbar-brand">
         <h1>Nest Degree Tracker</h1>
       </Link>
       {loggedIn ? (
         <div className="navbar-right text-muted">
+          <em className="text-light me-3">
+            Logged in as {user?.firstName} {user?.lastName}
+          </em>
           <button className="btn btn-primary" onClick={doLogout}>
             Logout
           </button>

@@ -15,11 +15,22 @@ using Microsoft.Extensions.Options;
 public class MajorsController : Controller
 {
     private readonly IMajorService _majorService;
+    private readonly User _userContext;
+    private readonly ICourseService _courseService;
 
-    public MajorsController(IMajorService majorService)
+    public MajorsController(IMajorService majorService, IHttpContextAccessor context, ICourseService courseService)
     {
         _majorService = majorService;
+        _userContext = (User)context.HttpContext.Items["User"];
+        _courseService = courseService;
+    }
 
+    [HttpGet]
+    public IActionResult GetMajors()
+    {
+        var response = _majorService.GetAll();
+
+        return Ok(response);
     }
 
     [HttpGet("byName/{name}")]
@@ -38,12 +49,25 @@ public class MajorsController : Controller
         return Ok(response);
     }
 
-    [HttpGet]
-    public IActionResult GetMajors()
+    [HttpGet("check-requirements")]
+    public IActionResult Requirements()
     {
-        var response = _majorService.GetAll();
-
+        if (_userContext == null) throw new AppException("Invalid token");
+        var response = _majorService.CheckRequirements(_userContext.UserId, _courseService.GetAll(_userContext.UserId));
         return Ok(response);
+    }
+
+    [HttpPost("user-specific-requirements")]
+    public IActionResult UserSpecificRequirements(SpecificRequirements user_requirements)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (_userContext == null) throw new AppException("Invalid token");
+        _majorService.UpdateSpecificRequirements(_userContext.UserId,user_requirements);
+        return Ok(new { Message = "Requirements have been updated"});
     }
 }
 
