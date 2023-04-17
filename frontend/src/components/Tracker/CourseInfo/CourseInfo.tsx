@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Course } from "../../../lib/api/useCourses";
+import { Course, useCourses } from "../../../lib/api/useCourses";
 import "./CourseInfo.scss";
 import { TrackerContext } from "../DegreeMap/TrackerContext";
 import { Modal } from "bootstrap";
@@ -9,6 +9,7 @@ import { useRemoveCourse } from "../../../lib/api/useRemoveCourse";
 
 function CourseInfo() {
   const { selectedCourse, setSelectedCourse } = useContext(TrackerContext);
+  const { data: courses } = useCourses();
 
   const { user } = useAuth();
 
@@ -59,7 +60,30 @@ function CourseInfo() {
                 "No availability information provided."}
             </p>
             <p className="fw-bold mb-1">Prerequisites</p>
-            <p>{selectedCourse?.prerequisites?.join(", ") ?? "N/A"}</p>
+            <p>
+              {selectedCourse?.prerequisites?.map((prereq) => {
+                const prereqCourse = courses?.find((c) => c.courseId == prereq);
+                if (!prereqCourse)
+                  return (
+                    <>
+                      {prereq}
+                      <br />
+                    </>
+                  );
+                return (
+                  <a
+                    role="button"
+                    className="link"
+                    onClick={() => {
+                      if (prereqCourse) setSelectedCourse(prereqCourse);
+                    }}
+                  >
+                    {prereqCourse?.courseId}: {prereqCourse?.courseName}
+                    <br />
+                  </a>
+                );
+              }) ?? "N/A"}
+            </p>
 
             <p className="fw-bold mb-1">Corequisites</p>
             <p>{selectedCourse?.coRequisites?.join(", ") ?? "N/A"}</p>
