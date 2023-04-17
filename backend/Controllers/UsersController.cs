@@ -69,6 +69,11 @@ namespace backend.Controllers
         [HttpPut("update-account")]
         public IActionResult Update(UpdateRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (_userContext == null) throw new AppException("Invalid token");
 
             _userService.Update(_userContext.UserId, model);
