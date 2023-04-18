@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using backend.Authorization;
 using AutoMapper;
-using backend.Entities;
+using backend.Models;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;

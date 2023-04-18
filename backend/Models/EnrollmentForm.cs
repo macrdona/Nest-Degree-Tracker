@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace backend.Entities
+namespace backend.Models
 {
     public class EnrollmentForm
     {
@@ -14,7 +14,7 @@ namespace backend.Entities
         public string? Major { get; set; }
 
         [Required]
-        public string? Minor { get; set;}
+        public string? Minor { get; set; }
 
         [Required]
         public bool OralRequirementComplete { get; set; }
@@ -29,10 +29,10 @@ namespace backend.Entities
         public string? Major { get; set; }
 
         [Required]
-        public string? Minor { get; set;}
+        public string? Minor { get; set; }
 
         [Required]
-        public List<String>? Courses { get; set; }
+        public List<string>? Courses { get; set; }
 
         [Required]
         public bool OralRequirementComplete { get; set; }
@@ -41,7 +41,7 @@ namespace backend.Entities
     public class CompletedCourses
     {
         public CompletedCourses() { }
-        public CompletedCourses(int userId, string course, bool completed=true)
+        public CompletedCourses(int userId, string course, bool completed = true)
         {
             UserId = userId;
             CourseId = course;

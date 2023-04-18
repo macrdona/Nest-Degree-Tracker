@@ -7,6 +7,7 @@ using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
+using backend.Models;
 
 //[Authorize]
 [ApiController]

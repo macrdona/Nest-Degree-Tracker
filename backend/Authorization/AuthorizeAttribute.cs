@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using backend.Entities;
+using backend.Models;
 
 /*
  * This class provides the functionality for [Authorization]. 

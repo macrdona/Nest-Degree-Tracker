@@ -7,7 +7,7 @@ using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
-
+using backend.Models;
 
 [ApiController]
 [Route("[controller]")]
@@ -57,7 +57,7 @@ public class MajorsController : Controller
         return Ok(response);
     }
 
-    [HttpPost("user-specific-requirements")]
+    [HttpPost("update-specific-requirements")]
     public IActionResult UserSpecificRequirements(SpecificRequirements user_requirements)
     {
         if (!ModelState.IsValid)

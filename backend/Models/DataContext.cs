@@ -1,4 +1,4 @@
-﻿using backend.Entities;
+﻿using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Models
@@ -22,9 +22,6 @@ namespace backend.Models
         {
             modelBuilder.Entity<CompletedCourses>()
                 .HasKey(k => new { k.UserId, k.CourseId });
-
-            modelBuilder.Entity<Requirements>()
-                .HasKey(k => new { k.UserId, k.Name });
         }
 
         public DbSet<User> Users { get; set; }
@@ -33,7 +30,5 @@ namespace backend.Models
         public DbSet<Majors> Majors { get; set; }
 
         public DbSet<CompletedCourses> CompletedCourses { get;set; }
-
-        public DbSet<Requirements> Requirements { get; set; }
     }
 }
