@@ -153,12 +153,12 @@ namespace backend.Entities
                 else if (thinking_selection_limit1 > 0 && thinking_selection_courses1.Contains(course_id))
                 {
                     earned_credits += course.Credits;
-                    writing_selection_limit1--;
+                    thinking_selection_limit1--;
                 }
                 else if (thinking_selection_limit2 > 0 && thinking_selection_courses2.Contains(course_id) || thinking_selection_courses1.Contains(course_id) || social.Contains(course_id) || humanities.Contains(course_id))
                 {
                     earned_credits += course.Credits;
-                    writing_selection_limit2--;
+                    thinking_selection_limit2--;
                 }
                 else if (analysis_selection_limit1 > 0 && analysis_selection_courses1.Contains(course_id) || math.Contains(course_id) || science.Contains(course_id))
                 {
@@ -180,35 +180,39 @@ namespace backend.Entities
                 satisfied = true;
             }
 
-            if(writing_selection_limit1 > 0)
+            if (!satisfied)
             {
-                missing_courses[$"Must complete {writing_selection_limit1} of the following section 1 writing course(s)"] = writing_selection_courses1;
-            }
+                if (writing_selection_limit1 > 0)
+                {
+                    missing_courses[$"Must complete {writing_selection_limit1} of the following section 1 writing course(s)"] = writing_selection_courses1;
+                }
 
-            if (writing_selection_limit2 > 0)
-            {
-                missing_courses[$"Must complete {writing_selection_limit2} of the following section 2 writing course(s)"] = writing_selection_courses2;
-            }
+                if (writing_selection_limit2 > 0)
+                {
+                    missing_courses[$"Must complete {writing_selection_limit2} of the following section 2 writing course(s)"] = writing_selection_courses2;
+                }
 
-            if (thinking_selection_limit1 > 0)
-            {
-                missing_courses[$"Must complete {thinking_selection_limit1} of the following diversity and difference course(s)"] = thinking_selection_courses1;
-            }
+                if (thinking_selection_limit1 > 0)
+                {
+                    missing_courses[$"Must complete {thinking_selection_limit1} of the following diversity and difference course(s)"] = thinking_selection_courses1;
+                }
 
-            if (thinking_selection_limit2 > 0)
-            {
-                missing_courses[$"Must complete {thinking_selection_limit2} of the following critical thinking course(s)"] = thinking_selection_courses2;
-            }
+                if (thinking_selection_limit2 > 0)
+                {
+                    missing_courses[$"Must complete {thinking_selection_limit2} of the following critical thinking course(s)"] = thinking_selection_courses2;
+                }
 
-            if (analysis_selection_limit1 > 0)
-            {
-                missing_courses[$"Must complete  {analysis_selection_limit1}  of the following quantitative reasoning and analysis course(s)"] = analysis_selection_courses1;
-            }
+                if (analysis_selection_limit1 > 0)
+                {
+                    missing_courses[$"Must complete  {analysis_selection_limit1}  of the following quantitative reasoning and analysis course(s)"] = analysis_selection_courses1;
+                }
 
-            if (analysis_selection_limit2 > 0)
-            {
-                missing_courses[$"Must complete  {analysis_selection_limit2}  of the following scientific method course(s) "] = analysis_selection_courses2;
+                if (analysis_selection_limit2 > 0)
+                {
+                    missing_courses[$"Must complete  {analysis_selection_limit2}  of the following scientific method course(s) "] = analysis_selection_courses2;
+                }
             }
+            
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }

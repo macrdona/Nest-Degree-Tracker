@@ -221,7 +221,7 @@ namespace backend.Entities.MajorsRequirements
         override public int prerequisites_credits { get; } = 11;
         override public int core_requirement_credits { get; } = 18;
         override public int major_requirement_credits { get; } = 33;
-        public Requirements Requisites(IEnumerable<CoursesRequest> courses)
+        override public Requirements Requisites(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "ENC2210" };
             List<string> sequence1_courses = new List<string>() { "BSC1010", "BSC1011" };
@@ -323,7 +323,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, earned_credits == total_credits ? true : false, missing_courses);
         }
 
-        public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
+        override public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP2220", "MAC2311", "MAC2312" };
             Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
@@ -358,7 +358,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }
 
-        public Requirements CoreReqs(IEnumerable<CoursesRequest> courses)
+        override public Requirements CoreReqs(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP3503", "COP3530", "CIS3253", "COP3703", "CNT4504" };
             List<string> user_selection_courses = new List<string>() { "COT3100", "MAD3107" };
@@ -406,7 +406,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }
 
-        public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
+        override public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "MAS3105", "STA3163", "STA3164", "STA4321", "CAP4784", "CAP4770", "COT4400" };
             List<string> user_selection_courses1 = new List<string>() { "COT4560", "COT4111", "COT4461", "MAD4301", "MAD4203", "MAD4505" };
@@ -484,7 +484,7 @@ namespace backend.Entities.MajorsRequirements
         override public int prerequisites_credits { get; } = 12;
         override public int major_requirement_credits { get; } = 19;
 
-        public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
+        override public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP2220", "CGS1570" };
             List<string> user_selection_courses1 = new List<string>() { "MAC2233", "MAC2311" };
@@ -544,7 +544,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }
 
-        public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
+        override public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP3855", "CDA4010", "COP4813", "CAP4784", "CIS4327", "CIS4328" };
             Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
@@ -584,7 +584,7 @@ namespace backend.Entities.MajorsRequirements
     {
         override public int prerequisites_credits { get; } = 24;
         override public int major_requirement_credits { get; } = 31;
-        public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
+        override public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP2220", "ACG2021", "ACG2071", "CGS1100", "ECO2013", "ECO2023" };
             List<string> user_selection_courses1 = new List<string>() { "MAC2233", "MAC2311" };
@@ -644,7 +644,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }
 
-        public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
+        override public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP3855", "CDA4010", "COP3813", "COP4854", "CAP4784", "CIS4327", "CIS4328", "ISM4011", "MAN3025", "FIN3403" };
             Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
@@ -682,9 +682,9 @@ namespace backend.Entities.MajorsRequirements
 
     public class InformationTechnology : CollegeOfComputing
     {
-        override public int prerequisites_credits { get; } = 15;
+        override public int prerequisites_credits { get; } = 12;
         override public int major_requirement_credits { get; } = 30;
-        public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
+        override public Requirements Prerequisites(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "COP2220", "CGS1570" };
             List<string> user_selection_courses1 = new List<string>() { "MAC2233", "MAC2311" };
@@ -744,7 +744,7 @@ namespace backend.Entities.MajorsRequirements
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
         }
 
-        public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
+        override public Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
         {
             List<string> required = new List<string>() { "CIS3526", "COP4640", "CIS4360", "CIS4362", "CIS4364", "CIS4365", "CIS4366", "CNT4406", "CEN4083", "CIS4325" };
             Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
