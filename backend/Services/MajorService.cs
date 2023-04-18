@@ -45,10 +45,7 @@ namespace backend.Services
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorName == majorName);
 
-            if ( major == null )
-            {
-                throw new KeyNotFoundException("Major not found");
-            }
+            if ( major == null ) throw new KeyNotFoundException("Major not found");
 
             return major;
         }
@@ -58,44 +55,55 @@ namespace backend.Services
             //checks if major exists
             var major = _context.Majors.FirstOrDefault(x => x.MajorId == id);
 
-            if (major == null)
-            {
-                throw new KeyNotFoundException("Major not found");
-            }
-
-
+            if (major == null) throw new KeyNotFoundException("Major not found");
+            
             return major;
         }
 
 
         public IEnumerable<Requirements> CheckRequirements(int id, IEnumerable<CoursesRequest> courses)
         {
-            //grab all courses user has completed
-            var course_query = courses.Where(x => x.Completed);
-            if (course_query == null) throw new AppException("No courses available");
+            try
+            {
+                //grab all courses user has completed
+                var course_query = courses.Where(x => x.Completed);
+                if (course_query == null) throw new AppException("No courses available");
 
-            //grab user's major
-            var enrollment_query = _context.Enrollments.FirstOrDefault(x => x.UserId == id);
-            var major_query = _context.Majors.FirstOrDefault(x => x.MajorName == enrollment_query.Major);
+                //grab user's major
+                var enrollment_query = _context.Enrollments.FirstOrDefault(x => x.UserId == id);
+                var major_query = _context.Majors.FirstOrDefault(x => x.MajorName == enrollment_query.Major);
 
-            //check what requirements user has completed
-            var results = new UniversityRequirements().CheckRequirements(course_query, major_query.MajorId);
+                //check what requirements user has completed
+                var results = new UniversityRequirements().CheckRequirements(course_query, major_query.MajorId);
 
-            //check if user has complete oral requirement
-            var oral_req = (enrollment_query.OralRequirementComplete) ? 1 : 0;
-            results.Add(new Requirements("Oral Requirement", oral_req, 1, false, new Dictionary<string, List<string>>()));
+                //check if user has complete oral requirement
+                var oral_req = (enrollment_query.OralRequirementComplete) ? 1 : 0;
+                results.Add(new Requirements("Oral Requirement", oral_req, 1, false, new Dictionary<string, List<string>>()));
 
-            _context.SaveChanges();
-           
-            return results;
+                return results;
+            }
+            catch (Exception ex)
+            {
+                throw new AppException(ex.Message);
+            }
+            
         }
 
         public void UpdateSpecificRequirements(int id, SpecificRequirements met_requirements)
         {
-            var oral_requirements = _context.Enrollments.FirstOrDefault(x => x.UserId == id);
-            oral_requirements.OralRequirementComplete = met_requirements.OralRequirement;
+            try
+            {
+                var oral_requirements = _context.Enrollments.FirstOrDefault(x => x.UserId == id);
+                if (oral_requirements == null) throw new AppException("User not found");
 
-            _context.SaveChanges();
+                oral_requirements.OralRequirementComplete = met_requirements.OralRequirement;
+                _context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw new AppException(ex.Message);
+            }
+            
         }
 
     }

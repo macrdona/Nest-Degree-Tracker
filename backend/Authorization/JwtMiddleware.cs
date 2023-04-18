@@ -13,7 +13,7 @@ namespace backend.Authorization
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
+        public async Task Invoke(HttpContext context, IUserService user_service, IJwtUtils jwtUtils)
         {
             //extracts the JWT token from the request Authorization header
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
@@ -25,7 +25,7 @@ namespace backend.Authorization
                 try
                 {
                     // attach user to context on successful jwt validation
-                    context.Items["User"] = userService.GetById(userId.Value);
+                    context.Items["User"] = user_service.GetById(userId.Value);
                 }
                 catch(Exception ex) 
                 {

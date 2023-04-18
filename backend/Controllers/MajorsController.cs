@@ -14,21 +14,21 @@ using backend.Models;
 [Authorize]
 public class MajorsController : Controller
 {
-    private readonly IMajorService _majorService;
-    private readonly User _userContext;
+    private readonly IMajorService _major_service;
+    private readonly User _user_context;
     private readonly ICourseService _courseService;
 
     public MajorsController(IMajorService majorService, IHttpContextAccessor context, ICourseService courseService)
     {
-        _majorService = majorService;
-        _userContext = (User)context.HttpContext.Items["User"];
+        _major_service = majorService;
+        _user_context = (User)context.HttpContext.Items["User"];
         _courseService = courseService;
     }
 
     [HttpGet]
     public IActionResult GetMajors()
     {
-        var response = _majorService.GetAll();
+        var response = _major_service.GetAll();
 
         return Ok(response);
     }
@@ -36,7 +36,7 @@ public class MajorsController : Controller
     [HttpGet("byName/{name}")]
     public IActionResult GetByName(string name)
     {
-        var response = _majorService.GetByName(name);
+        var response = _major_service.GetByName(name);
 
         return Ok(response);
     }
@@ -44,7 +44,7 @@ public class MajorsController : Controller
     [HttpGet("byId/{id}")]
     public IActionResult GetByID(int id)
     {
-        var response = _majorService.GetById(id);
+        var response = _major_service.GetById(id);
 
         return Ok(response);
     }
@@ -52,8 +52,8 @@ public class MajorsController : Controller
     [HttpGet("check-requirements")]
     public IActionResult Requirements()
     {
-        if (_userContext == null) throw new AppException("Invalid token");
-        var response = _majorService.CheckRequirements(_userContext.UserId, _courseService.GetAll(_userContext.UserId));
+        if (_user_context == null) throw new AppException("Invalid token");
+        var response = _major_service.CheckRequirements(_user_context.UserId, _courseService.GetAll(_user_context.UserId));
         return Ok(response);
     }
 
@@ -65,8 +65,8 @@ public class MajorsController : Controller
             return BadRequest(ModelState);
         }
 
-        if (_userContext == null) throw new AppException("Invalid token");
-        _majorService.UpdateSpecificRequirements(_userContext.UserId,user_requirements);
+        if (_user_context == null) throw new AppException("Invalid token");
+        _major_service.UpdateSpecificRequirements(_user_context.UserId,user_requirements);
         return Ok(new { Message = "Requirements have been updated"});
     }
 }

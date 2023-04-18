@@ -15,59 +15,53 @@ using backend.Models;
 [Authorize]
 public class CoursesController : ControllerBase
 {
-    private readonly ICourseService _courseService;
-    private readonly IMapper _mapper;
-    private readonly AppSettings _appSettings;
-    private readonly User _userContext;
+    private readonly ICourseService _course_service;
+    private readonly User _user_context;
 
     public CoursesController(
         ICourseService courseService,
-        IMapper mapper,
-        IOptions<AppSettings> appSettings,
         IHttpContextAccessor context)
     {
-        _courseService = courseService;
-        _mapper = mapper;
-        _appSettings = appSettings.Value;
-        _userContext = (User)context.HttpContext.Items["User"];
+        _course_service = courseService;
+        _user_context = (User)context.HttpContext.Items["User"];
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
     {
-        var response = _courseService.GetCourseById(id);
+        var response = _course_service.GetCourseById(id);
         return Ok(response);
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        if (_userContext == null) throw new AppException("Invalid token");
+        if (_user_context == null) throw new AppException("Invalid token");
 
-        var response = _courseService.GetAll(_userContext.UserId);
+        var response = _course_service.GetAll(_user_context.UserId);
         return Ok(response);
     }
 
     [HttpGet("recommendations")]
     public IActionResult Recommendations()
     {
-        if (_userContext == null) throw new AppException("Invalid token");
-        var response = _courseService.CourseRecommendations(_userContext.UserId);
+        if (_user_context == null) throw new AppException("Invalid token");
+        var response = _course_service.CourseRecommendations(_user_context.UserId);
         return Ok(response);
     }
 
     [HttpPost("add")]
-    public IActionResult AddCourse(CompletedCourses newCourse)
+    public IActionResult AddCourse(CompletedCourses new_course)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        if (_userContext == null) throw new AppException("Invalid token");
+        if (_user_context == null) throw new AppException("Invalid token");
 
-        newCourse.UserId = _userContext.UserId;
-        _courseService.AddCourse(newCourse);
+        new_course.UserId = _user_context.UserId;
+        _course_service.AddCourse(new_course);
         return Ok(new {Message = "Course has been added."});
     }
 
@@ -79,10 +73,10 @@ public class CoursesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        if (_userContext == null) throw new AppException("Invalid token");
+        if (_user_context == null) throw new AppException("Invalid token");
 
-        course.UserId = _userContext.UserId;
-        _courseService.RemoveCourse(course);
+        course.UserId = _user_context.UserId;
+        _course_service.RemoveCourse(course);
         return Ok(new { Message = "Course has been removed." });
     }
 }

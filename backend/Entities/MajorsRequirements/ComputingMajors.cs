@@ -94,7 +94,7 @@ namespace backend.Entities.MajorsRequirements
 
             if (!required.IsNullOrEmpty())
             {
-                missing_courses.Add("Must complete the following courses", required);
+                missing_courses.Add("Must complete the following courses. For physics you only have to complete PHY2048C or PHY2048 & PHY2048L (same applies for PHY2049).", required);
             }
             
             if(user_selection_limit > 0)
@@ -300,20 +300,24 @@ namespace backend.Entities.MajorsRequirements
 
             if (!required.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = required;
+                missing_courses["Must complete the following course(s). For physics you only have to complete PHY2048C or PHY2048 & PHY2048L (same applies for PHY2049)."] = required;
             }
 
             if(sequence1 && !sequence1_courses.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = sequence1_courses;
+                missing_courses["Must complete the following biology course(s) "] = sequence1_courses;
             }
             else if (sequence2 && !sequence2_courses.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = sequence2_courses;
+                missing_courses["Must complete the following chemistry course(s) "] = sequence2_courses;
             }
             else if (sequence3 && !sequence3_courses.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = sequence3_courses;
+                missing_courses["Must complete some the following physics lab & course(s) "] = sequence3_courses;
+            }
+            else if(!sequence1 && !sequence2 && !sequence3)
+            {
+                missing_courses["Must complete the following biology course(s) "] = sequence1_courses;
             }
 
             return new Requirements(name, earned_credits, total_credits, earned_credits == total_credits ? true : false, missing_courses);
@@ -458,17 +462,17 @@ namespace backend.Entities.MajorsRequirements
 
             if (user_selection_limit1 > 0 && !user_selection_courses1.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = user_selection_courses1;
+                missing_courses[$"Must complete {user_selection_limit1} of the following course(s) from selection 1"] = user_selection_courses1;
             }
             
             if (user_selection_limit2 > 0 && !user_selection_courses2.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = user_selection_courses2;
+                missing_courses[$"Must complete {user_selection_limit2} of the following course(s) from selection 2"] = user_selection_courses2;
             }
             
             if (user_selection_limit3 > 0 && !user_selection_courses3.IsNullOrEmpty())
             {
-                missing_courses["Must complete the following course(s) "] = user_selection_courses3;
+                missing_courses[$"Must complete {user_selection_limit3} of the following course(s) from selection 3"] = user_selection_courses3;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
@@ -529,12 +533,12 @@ namespace backend.Entities.MajorsRequirements
 
             if (user_selection_limit1 > 0 && !user_selection_courses1.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit1} the following course(s) "] = user_selection_courses1;
+                missing_courses[$"Must complete {user_selection_limit1} the following course(s) from selection 1"] = user_selection_courses1;
             }
             
             if (user_selection_limit2 > 0 && !user_selection_courses2.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit2} the following course(s) "] = user_selection_courses2;
+                missing_courses[$"Must complete {user_selection_limit2} the following course(s) from selection 2"] = user_selection_courses2;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
@@ -629,12 +633,12 @@ namespace backend.Entities.MajorsRequirements
 
             if (user_selection_limit1 > 0 && !user_selection_courses1.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit1} the following course(s) "] = user_selection_courses1;
+                missing_courses[$"Must complete {user_selection_limit1} the following course(s) from selection 1"] = user_selection_courses1;
             }
             
             if (user_selection_limit2 > 0 && !user_selection_courses2.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit2} the following course(s) "] = user_selection_courses2;
+                missing_courses[$"Must complete {user_selection_limit2} the following course(s) from selection 2"] = user_selection_courses2;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
@@ -729,12 +733,12 @@ namespace backend.Entities.MajorsRequirements
 
             if (user_selection_limit1 > 0 && !user_selection_courses1.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit1} the following course(s) "] = user_selection_courses1;
+                missing_courses[$"Must complete {user_selection_limit1} the following course(s) from selection 1"] = user_selection_courses1;
             }
             
             if (user_selection_limit2 > 0 && !user_selection_courses2.IsNullOrEmpty())
             {
-                missing_courses[$"Must complete {user_selection_limit2} the following course(s) "] = user_selection_courses2;
+                missing_courses[$"Must complete {user_selection_limit2} the following course(s) from selection 2"] = user_selection_courses2;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
