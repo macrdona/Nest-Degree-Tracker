@@ -83,7 +83,7 @@ namespace backend.Services
 
             //check if user has complete oral requirement
             var oral_req = (enrollment_query.OralRequirementComplete) ? 1 : 0;
-            results.Add(new Requirements("Oral Requirement", oral_req, 1, false, new Dictionary<string, string>()));
+            results.Add(new Requirements("Oral Requirement", oral_req, 1, false, new Dictionary<string, List<string>>()));
 
             _context.SaveChanges();
            

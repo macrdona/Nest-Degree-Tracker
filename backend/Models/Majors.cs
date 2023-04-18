@@ -24,8 +24,8 @@ namespace backend.Models
 
     public class Requirements
     {
-        public Requirements(string name, int completed_credits, int total_credits, bool satisfied, Dictionary<string, string> missing_courses)
-        {
+        public Requirements(string name, int completed_credits, int total_credits, bool satisfied, Dictionary<string, List<string>> missing_courses)
+        { 
             Name = name;
             CompletedCredits = completed_credits;
             TotalCredits = total_credits;
@@ -39,6 +39,6 @@ namespace backend.Models
         public int CompletedCredits { get; set; }
         public int TotalCredits { get; set; }
         public bool Satisfied { get; set; }
-        public Dictionary<string,string> MissingCourses { get; set; }
+        public Dictionary<string,List<string>> MissingCourses { get; set; }
     }
 }

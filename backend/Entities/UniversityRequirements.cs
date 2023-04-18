@@ -30,7 +30,7 @@ namespace backend.Entities
 
         public Requirements StateRequirements(IEnumerable<CoursesRequest> courses)
         {
-            Dictionary<string, string> missing_courses = new Dictionary<string, string>();
+            Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
             bool communication_complete = false;
             bool humanities_complete = false;
             bool social_complete = false;
@@ -91,25 +91,25 @@ namespace backend.Entities
 
             if (!communication_complete)
             {
-                missing_courses[$"Must 1 complete the following course(s) "] = String.Join(",", new List<string>() { "ENC1101" });
+                missing_courses[$"Must complete 1 of the following course(s) "] = new List<string>() { "ENC1101" };
             }
 
             if (!humanities_complete)
             {
-                missing_courses[$"Must 1 complete the following course(s) "] = String.Join(",", humanities);
+                missing_courses[$"Must complete 1 of the following course(s) "] = humanities;
             }
             if (!social_complete)
             {
-                missing_courses[$"Must 1 complete the following course(s) "] = String.Join(",", social);
+                missing_courses[$"Must complete 1 of the following course(s) "] = social;
             }
 
             if (!math_complete)
             {
-                missing_courses[$"Must 1 complete the following course(s) "] = String.Join(",", math);
+                missing_courses[$"Must complete 1 of the following course(s) "] = math;
             }
             if (!science_complete)
             {
-                missing_courses[$"Must 1 complete the following course(s) "] = String.Join(",", science);
+                missing_courses[$"Must complete 1 of the following course(s) "] = science;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
@@ -123,8 +123,8 @@ namespace backend.Entities
             List<string> thinking_selection_courses2 = new List<string>() { "ARH2050", "ARH2051", "CCJ2002", "FIL2000", "HSC2100", "LDR3003", "MUH2012", "MUH2017", "MUH2018", "MUT1111", "PHI2100", "PHI2630", "WOH1012", "WOH1022" };
             List<string> analysis_selection_courses1 = new List<string>() { "MGF1113", "PHI2101", "IDC2000", "CHM1025", "GLY2010", "HUN2201", "PHY1028" };
             List<string> analysis_selection_courses2 = new List<string>() { "AST2002L", "BSC1005L", "CHM1025L", "CHM2045L", "ESC2000L", "PHY1020L", "PHY1028L" };
-            
-            Dictionary<string, string> missing_courses = new Dictionary<string, string>();
+
+            Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
 
             int writing_selection_limit1 = 1;
             int writing_selection_limit2 = 1;
@@ -182,32 +182,32 @@ namespace backend.Entities
 
             if(writing_selection_limit1 > 0)
             {
-                missing_courses[$"Must {writing_selection_limit1} complete the following course(s) "] = String.Join(",", writing_selection_courses1);
+                missing_courses[$"Must complete {writing_selection_limit1} of the following course(s) "] = writing_selection_courses1;
             }
 
             if (writing_selection_limit2 > 0)
             {
-                missing_courses[$"Must  {writing_selection_limit1}  complete the following course(s) s) "] = String.Join(",", writing_selection_courses2);
+                missing_courses[$"Must complete {writing_selection_limit1} of the following course(s) s) "] = writing_selection_courses2;
             }
 
             if (thinking_selection_limit1 > 0)
             {
-                missing_courses[$"Must {thinking_selection_limit1} complete the following course(s) "] = String.Join(",", thinking_selection_courses1);
+                missing_courses[$"Must complete {thinking_selection_limit1} of the following course(s) "] = thinking_selection_courses1;
             }
 
             if (thinking_selection_limit2 > 0)
             {
-                missing_courses[$"Must {thinking_selection_limit2} complete the following course(s) "] = String.Join(",", thinking_selection_courses2);
+                missing_courses[$"Must complete {thinking_selection_limit2} of the following course(s) "] = thinking_selection_courses2;
             }
 
             if (analysis_selection_limit1 > 0)
             {
-                missing_courses[$"Must {analysis_selection_limit1} complete the following course(s) "] = String.Join(",", analysis_selection_courses1);
+                missing_courses[$"Must complete  {analysis_selection_limit1}  of the following course(s) "] = analysis_selection_courses1;
             }
 
             if (analysis_selection_limit2 > 0)
             {
-                missing_courses[$"Must {analysis_selection_limit2} complete the following course(s) "] = String.Join(",", analysis_selection_courses2);
+                missing_courses[$"Must complete  {analysis_selection_limit2}  of the following course(s) "] = analysis_selection_courses2;
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
