@@ -118,7 +118,7 @@ namespace backend.Entities
         public Requirements UNFGeneralRequirements(IEnumerable<CoursesRequest> courses)
         {
             List<string> writing_selection_courses1 = new List<string>() { "ENC1143", "IDS1932" };
-            List<string> writing_selection_courses2 = new List<string>() { "ENC 1102", "CRW2000", "CRW2100", "CRW2201", "CRW2300", "CRW2400", "CRW2600", "ENC2210", "ENC2443", "ENC2451", "ENC2461", "ENC3202", "ENC3246", "ENC3250" };
+            List<string> writing_selection_courses2 = new List<string>() { "ENC1102", "CRW2000", "CRW2100", "CRW2201", "CRW2300", "CRW2400", "CRW2600", "ENC2210", "ENC2443", "ENC2451", "ENC2461", "ENC3202", "ENC3246", "ENC3250" };
             List<string> thinking_selection_courses1 = new List<string>() { "ANT2000", "ANT2423", "ASN2003", "EDF2085", "GEB2956", "GEO2420", "MMC2701", "MUH2501", "PUP2312", "REL2300", "SYG2013" };
             List<string> thinking_selection_courses2 = new List<string>() { "ARH2050", "ARH2051", "CCJ2002", "FIL2000", "HSC2100", "LDR3003", "MUH2012", "MUH2017", "MUH2018", "MUT1111", "PHI2100", "PHI2630", "WOH1012", "WOH1022" };
             List<string> analysis_selection_courses1 = new List<string>() { "MGF1113", "PHI2101", "IDC2000", "CHM1025", "GLY2010", "HUN2201", "PHY1028" };
