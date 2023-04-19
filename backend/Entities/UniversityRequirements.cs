@@ -30,7 +30,7 @@ namespace backend.Entities
 
         public Requirements StateRequirements(IEnumerable<CoursesRequest> courses)
         {
-            Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
+            List<RequiredCourses> missing_courses = new List<RequiredCourses>();
             bool communication_complete = false;
             bool humanities_complete = false;
             bool social_complete = false;
@@ -91,25 +91,25 @@ namespace backend.Entities
 
             if (!communication_complete)
             {
-                missing_courses[$"Must complete 1 of the following communications course(s) "] = new List<string>() { "ENC1101" };
+                missing_courses.Add(new RequiredCourses($"Must complete 1 of the following communications course(s)", new List<string>() { "ENC1101" }));
             }
 
             if (!humanities_complete)
             {
-                missing_courses[$"Must complete 1 of the following humanities course(s) "] = humanities;
+                missing_courses.Add(new RequiredCourses($"Must complete 1 of the following humanities course(s)", humanities));
             }
             if (!social_complete)
             {
-                missing_courses[$"Must complete 1 of the following social science course(s) "] = social;
+                missing_courses.Add(new RequiredCourses($"Must complete 1 of the following social science course(s)", social));
             }
 
             if (!math_complete)
             {
-                missing_courses[$"Must complete 1 of the following math course(s) "] = math;
+                missing_courses.Add(new RequiredCourses($"Must complete 1 of the following math course(s)", math));
             }
             if (!science_complete)
             {
-                missing_courses[$"Must complete 1 of the following science course(s) "] = science;
+                missing_courses.Add(new RequiredCourses($"Must complete 1 of the following science course(s)", science));
             }
 
             return new Requirements(name, earned_credits, total_credits, satisfied, missing_courses);
@@ -124,7 +124,7 @@ namespace backend.Entities
             List<string> analysis_selection_courses1 = new List<string>() { "MGF1113", "PHI2101", "IDC2000", "CHM1025", "GLY2010", "HUN2201", "PHY1028" };
             List<string> analysis_selection_courses2 = new List<string>() { "AST2002L", "BSC1005L", "CHM1025L", "CHM2045L", "ESC2000L", "PHY1020L", "PHY1028L" };
 
-            Dictionary<string, List<string>> missing_courses = new Dictionary<string, List<string>>();
+            List<RequiredCourses> missing_courses = new List<RequiredCourses>();
 
             int writing_selection_limit1 = 1;
             int writing_selection_limit2 = 1;
@@ -184,32 +184,32 @@ namespace backend.Entities
             {
                 if (writing_selection_limit1 > 0)
                 {
-                    missing_courses[$"Must complete {writing_selection_limit1} of the following section 1 writing course(s)"] = writing_selection_courses1;
+                    missing_courses.Add(new RequiredCourses($"Must complete {writing_selection_limit1} of the following section 1 writing course(s)", writing_selection_courses1));
                 }
 
                 if (writing_selection_limit2 > 0)
                 {
-                    missing_courses[$"Must complete {writing_selection_limit2} of the following section 2 writing course(s)"] = writing_selection_courses2;
+                    missing_courses.Add(new RequiredCourses($"Must complete {writing_selection_limit2} of the following section 2 writing course(s)", writing_selection_courses2));
                 }
 
                 if (thinking_selection_limit1 > 0)
                 {
-                    missing_courses[$"Must complete {thinking_selection_limit1} of the following diversity and difference course(s)"] = thinking_selection_courses1;
+                    missing_courses.Add(new RequiredCourses($"Must complete {thinking_selection_limit1} of the following diversity and difference course(s)", thinking_selection_courses1));
                 }
 
                 if (thinking_selection_limit2 > 0)
                 {
-                    missing_courses[$"Must complete {thinking_selection_limit2} of the following critical thinking course(s)"] = thinking_selection_courses2;
+                    missing_courses.Add(new RequiredCourses($"Must complete {thinking_selection_limit2} of the following critical thinking course(s)", thinking_selection_courses2));
                 }
 
                 if (analysis_selection_limit1 > 0)
                 {
-                    missing_courses[$"Must complete  {analysis_selection_limit1}  of the following quantitative reasoning and analysis course(s)"] = analysis_selection_courses1;
+                    missing_courses.Add(new RequiredCourses($"Must complete  {analysis_selection_limit1}  of the following quantitative reasoning and analysis course(s)", analysis_selection_courses1));
                 }
 
                 if (analysis_selection_limit2 > 0)
                 {
-                    missing_courses[$"Must complete  {analysis_selection_limit2}  of the following scientific method course(s) "] = analysis_selection_courses2;
+                    missing_courses.Add(new RequiredCourses($"Must complete  {analysis_selection_limit2}  of the following scientific method course(s)", analysis_selection_courses2));
                 }
             }
             
