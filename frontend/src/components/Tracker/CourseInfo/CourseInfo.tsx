@@ -38,13 +38,13 @@ function CourseInfo() {
   }, [selectedCourse]);
 
   return (
-    <div className="modal fade" tabIndex={-1} ref={modalRef}>
+    <div className="modal fade course-info" tabIndex={-1} ref={modalRef}>
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
+            <h4 className="modal-title">
               {selectedCourse?.courseId}: {selectedCourse?.courseName}
-            </h5>
+            </h4>
             <button
               type="button"
               className="btn-close"
