@@ -139,7 +139,7 @@ namespace backend.Entities.MajorsRequirements
 
         public virtual Requirements MajorReqs(IEnumerable<CoursesRequest> courses)
         {
-            List<string> required = new List<string>() { "CDA3100", "COT3210", "COP3404", "CEN4010", "COP4610", "COP4620", "CAP4630", "MAS3105", "STA3032" };
+            List<string> required = new List<string>() { "CDA3100", "COT3210", "COP3404", "CEN4010", "COP4610", "COP4620", "CAP4630", "COT4400", "MAS3105", "STA3032" };
             List<RequiredCourses> missing_courses = new List<RequiredCourses>();
 
             var name = "Major Requirements";
