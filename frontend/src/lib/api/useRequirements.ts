@@ -3,11 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuthenticatedAxios } from "./authenticatedAxios";
 
+export interface MissingCourses {
+  description: string;
+  courseId: string[];
+}
 export interface CreditRequirement {
   name: string;
   completedCredits: number;
   totalCredits: number;
   satisfied: false;
+  missingCourses: MissingCourses[];
 }
 
 export const useRequirements = () => {

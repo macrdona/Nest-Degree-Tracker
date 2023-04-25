@@ -21,7 +21,7 @@ namespace backend.Helpers
 
     public class ValidationFailedResult : ObjectResult
     {
-        public ValidationFailedResult(ModelStateDictionary modelState) : base (new ValidationResultModel(modelState))
+        public ValidationFailedResult(ModelStateDictionary model_state) : base (new ValidationResultModel(model_state))
         {
             StatusCode = StatusCodes.Status400BadRequest;
         }
@@ -32,11 +32,11 @@ namespace backend.Helpers
         public string StatusCode { get; }
         public string Message { get; }
         public List<ValidationError> Errors { get; } 
-        public ValidationResultModel(ModelStateDictionary modelState)
+        public ValidationResultModel(ModelStateDictionary model_state)
         {
             StatusCode = "400";
             Message = "One or more required fields are missing";
-            Errors = modelState.Keys.SelectMany(key => modelState[key].Errors
+            Errors = model_state.Keys.SelectMany(key => model_state[key].Errors
                                     .Select(e => new ValidationError(key, e.ErrorMessage)))
                                     .ToList();
         }

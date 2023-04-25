@@ -2,6 +2,7 @@ import CourseInfo from "./CourseInfo/CourseInfo";
 import CreditsOverview from "./CreditsOverview/CreditsOverview";
 import DegreeMap from "./DegreeMap/DegreeMap";
 import { TrackerContextProvider } from "./DegreeMap/TrackerContext";
+import RequirementInfo from "./RequirementInfo/RequirementInfo";
 import "./Tracker.scss";
 
 interface TrackerProps {}
@@ -20,6 +21,7 @@ function Tracker(props: TrackerProps) {
         </div>
       </div>
       <CourseInfo />
+      <RequirementInfo />
     </TrackerContextProvider>
   );
 }

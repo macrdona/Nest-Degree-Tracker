@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using backend.Authorization;
 using AutoMapper;
-using backend.Entities;
+using backend.Models;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
@@ -17,17 +17,13 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
-        private readonly AppSettings _appSettings;
-        private readonly User _userContext;
+        private readonly IUserService _user_service;
+        private readonly User _user_context;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IHttpContextAccessor context)
+        public UsersController(IUserService user_service, IHttpContextAccessor context)
         {
-            _userService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
-            _userContext = (User)context.HttpContext.Items["User"];
+            _user_service = user_service;
+            _user_context = (User)context.HttpContext.Items["User"];
         }
 
         //Ok() will return a response with a status code and formatted data
@@ -40,7 +36,7 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var response = _userService.Authenticate(model);
+            var response = _user_service.Authenticate(model);
             return Ok(response);
         }
 
@@ -53,16 +49,16 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var response = _userService.Register(model);
+            var response = _user_service.Register(model);
             return Ok(response);
         }
 
         [HttpGet("info")]
         public IActionResult GetById()
         {
-            if (_userContext == null) throw new AppException("Invalid token");
+            if (_user_context == null) throw new AppException("Invalid token");
 
-            var user = _userService.GetById(_userContext.UserId);
+            var user = _user_service.GetById(_user_context.UserId);
             return Ok(user);
         }
 
@@ -74,9 +70,9 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_userContext == null) throw new AppException("Invalid token");
+            if (_user_context == null) throw new AppException("Invalid token");
 
-            _userService.Update(_userContext.UserId, model);
+            _user_service.Update(_user_context.UserId, model);
             return Ok(new { message = "User updated successfully" });
         }
 
@@ -88,11 +84,11 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_userContext == null) throw new AppException("Invalid token");
+            if (_user_context == null) throw new AppException("Invalid token");
 
-            form.UserId = _userContext.UserId;
+            form.UserId = _user_context.UserId;
             
-            var response = _userService.EnrollmentForm(form);
+            var response = _user_service.EnrollmentForm(form);
 
             return Ok(response);
         }
@@ -100,9 +96,9 @@ namespace backend.Controllers
         [HttpGet("enrollment-data")]
         public IActionResult EnrollmentData()
         {
-            if (_userContext == null) throw new AppException("Invalid token");
+            if (_user_context == null) throw new AppException("Invalid token");
 
-            var response = _userService.UserEnrollment(_userContext.UserId);
+            var response = _user_service.UserEnrollment(_user_context.UserId);
 
             return Ok(response);
         }

@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using backend.Entities;
+using backend.Models;
 using backend.Helpers;
 
 namespace backend.Authorization
@@ -18,27 +18,27 @@ namespace backend.Authorization
 
     public class JwtUtils : IJwtUtils
     {
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings _app_settings;
 
         public JwtUtils(IOptions<AppSettings> appSettings)
         {
-            _appSettings = appSettings.Value;
+            _app_settings = appSettings.Value;
         }
 
         //Generates JWT token with the id of the specified user
         public string GenerateToken(User user)
         {
             // generate token that is valid for 7 days
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var token_handler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_app_settings.Secret);
+            var token_descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserId.ToString()), new Claim("username", user.Username.ToString()), new Claim("firstName", user.FirstName.ToString()), new Claim("lastName", user.LastName.ToString()), new Claim("completed", user.EnrollmentCompleted.ToString().ToLower()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var token = token_handler.CreateToken(token_descriptor);
+            return token_handler.WriteToken(token);
         }
 
         //Validates given token
@@ -47,11 +47,11 @@ namespace backend.Authorization
             if (token == null)
                 return null;
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var token_handler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_app_settings.Secret);
             try
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                token_handler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -61,11 +61,11 @@ namespace backend.Authorization
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var jwt_token = (JwtSecurityToken)validatedToken;
+                var user_id = int.Parse(jwt_token.Claims.First(x => x.Type == "id").Value);
 
                 // return user id from JWT token if validation successful
-                return userId;
+                return user_id;
             }
             catch
             {

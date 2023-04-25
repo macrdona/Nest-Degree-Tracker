@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using backend.Entities;
+using backend.Models;
 
 /*
  * This class provides the functionality for [Authorization]. 
@@ -15,8 +15,8 @@ namespace backend.Authorization
         {
 
             // skip authorization if action is decorated with [AllowAnonymous] attribute
-            var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
-            if (allowAnonymous)
+            var allow_anonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+            if (allow_anonymous)
                 return;
 
             /*

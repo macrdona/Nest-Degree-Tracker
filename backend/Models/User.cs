@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace backend.Entities
+namespace backend.Models
 {
     //base User Model
     public class User

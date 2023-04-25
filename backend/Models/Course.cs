@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.Authorization;
 using AutoMapper;
-using backend.Entities;
 using backend.Services;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using Duende.IdentityServer.Extensions;
 
-namespace backend.Entities
+namespace backend.Models
 {
     public class Course
     {
